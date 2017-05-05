@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: https://gems.ruby-china.org/
   specs:
     addressable (2.2.8)
     bcrypt-ruby (3.0.1)
@@ -108,3 +108,6 @@ DEPENDENCIES
   rake
   rspec
   sinatra
+
+BUNDLED WITH
+   1.12.3
