@@ -10,6 +10,7 @@ gem 'dm-timestamps'
 gem 'dm-validations'
 gem 'dm-aggregates'
 gem 'dm-migrations'
+gem 'nokogiri'
 
 group :development do
   gem 'foreman'
