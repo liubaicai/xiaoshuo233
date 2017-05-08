@@ -8,34 +8,7 @@ require  'active_record'
 
 require 'logger'
 
-ActiveRecord::Base.establish_connection(
-    :adapter => 'sqlite3',
-    :database => 'dushu233.sqlite')
-
-# logger = Logger.new('dushu233.log')
-logger = Logger.new(STDOUT)
-logger.datetime_format = '%Y-%m-%d %H:%M:%S'
-
-class Book < ActiveRecord::Base
-  has_many :catalogs
-
-end
-
-class Catalog < ActiveRecord::Base
-  belongs_to :book
-
-end
-
-def CheckIsClose m_url,book
-  mdoc = Nokogiri::HTML(open(m_url), nil, "UTF-8")
-  if mdoc.inner_html.include?('状态：完成')
-    book.close = 1
-    book.save
-    logger.info("close:#{book.title}")
-  end
-end
-
-if ARGV.to_s.include?'exit'
+if ARGV.first.to_s == 'exit'
   if File.exist?('dushu233.pid')
     pid = `cat dushu233.pid`
     `kill -9 #{pid} `
@@ -53,6 +26,53 @@ end
 pid_txt = File.open('dushu233.pid',"wb")
 pid_txt.puts Process.pid
 pid_txt.close
+
+# logger = Logger.new('dushu233.log')
+logger = Logger.new(STDOUT)
+logger.datetime_format = '%Y-%m-%d %H:%M:%S'
+
+ActiveRecord::Base.establish_connection(
+    :adapter => 'sqlite3',
+    :database => 'dushu233.sqlite')
+
+if !File.exist?('dushu233.sqlite') || File.size('dushu233.sqlite')<1024
+  ActiveRecord::Schema.define(version: 20170508230300) do
+
+    create_table 'books', force: :cascade do |t|
+      t.string   'title'
+      t.integer  'close'
+    end
+
+    create_table 'catalogs', force: :cascade do |t|
+      t.integer   'book_id'
+      t.integer   'catalog_id'
+      t.string   'title'
+      t.string   'src'
+    end
+
+    add_index 'catalogs', ['book_id'], name: 'index_books_on_catalogs_id'
+
+  end
+end
+
+class Book < ActiveRecord::Base
+  has_many :catalogs
+
+end
+
+class Catalog < ActiveRecord::Base
+  belongs_to :book
+
+end
+
+def CheckIsClose m_url,book
+  mdoc = Nokogiri::HTML(open(m_url), nil, 'UTF-8')
+  if mdoc.inner_html.include?('状态：完成')
+    book.close = 1
+    book.save
+    logger.info("close:#{book.title}")
+  end
+end
 
 begin
 
@@ -134,6 +154,10 @@ begin
     end
   end
   logger.info('Close Update.')
+
+  if File.exist?('dushu233.pid')
+    File.delete('dushu233.pid')
+  end
 end
 
 # 下载内容code
