@@ -61,7 +61,12 @@ GEM
       thor (~> 0.19.1)
     json (1.8.3)
     json_pure (1.8.0)
+    mini_portile2 (2.1.0)
     multi_json (1.7.4)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
+    pkg-config (1.1.7)
     rack (1.5.2)
     rack-protection (1.5.0)
       rack
@@ -104,6 +109,7 @@ DEPENDENCIES
   dotenv
   foreman
   json (>= 1.8.3)
+  nokogiri
   rack-test
   rake
   rspec
