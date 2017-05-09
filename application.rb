@@ -19,16 +19,24 @@ helpers do
   # add your helpers here
 end
 
-target_host = 'www.biquge.co'
-# p = params['splat'][0]
-# src = Net::HTTP.get(target_host, "/#{p}")
-# html = src.encode('utf-8','gb18030')
-# html
-
 # root page
 get '/' do
-  url = 'http://www.biquge.co/xiaoshuodaquan/'
-  doc = Nokogiri::HTML(open(url), nil, "GB18030")
-  nodes = doc.css('div.novellist li')
-  nodes.to_s.encode("UTF-8")
+  @books = Book.all
+  erb :books
+end
+
+get '/:book_id.html' do
+  @book = Book.get(params['book_id'].to_i)
+  erb :catalogs
+end
+
+get '/:book_id/:catalog_id.html' do
+  @catalog = Catalog.first(:book_id => params['book_id'].to_i , :catalog_id => params['catalog_id'].to_i)
+
+  doc = Nokogiri::HTML(open(@catalog.src), nil, 'UTF-8')
+  n = doc.css('div#content')[0]
+  n.search('script').remove
+  @content = n.inner_html.gsub!('<br>　　<br>', '<br>')
+
+  erb :detail
 end

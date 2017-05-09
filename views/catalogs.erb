@@ -1,0 +1,6 @@
+<h4><%= @book.title %></h4>
+<ul>
+  <% @book.catalogs(:order => [ :catalog_id ]).each do |catalog| %>
+      <li><a href='/<%= @book.id %>/<%= catalog.catalog_id %>.html'><%= catalog.title %></a></li>
+  <% end %>
+</ul>

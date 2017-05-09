@@ -1,0 +1,6 @@
+<h4>Books</h4>
+<ul>
+  <% @books.each do |book| %>
+    <li><a href='/<%= book.id %>.html'><%= book.title %></a></li>
+  <% end %>
+</ul>
