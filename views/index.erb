@@ -1,0 +1,85 @@
+<style>
+  html {
+    height: 100%;
+    overflow-y: scroll;
+  }
+
+  #s-content {
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+  }
+
+  #s-skin-container {
+    height: 100%;
+    width: 100%;
+    min-width: 1000px;
+    -webkit-background-size: cover; /*随浏览器大小改变背景图大小*/
+    background-size:cover;/*随浏览器大小改变背景图大小*/
+    background-color: rgb(255,255,255);
+    /*background-image: url("https://ss3.bdstatic.com/iPoZeXSm1A5BphGlnYG/skin/486.jpg") ;*/
+    /*background-repeat:no-repeat;*/
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: -10;
+  }
+
+  #s-top-wrap a {
+    line-height: 32px;
+    color: #fff;
+    font-size: 13px;
+    margin-left: 10px;
+  }
+
+  #s-container {
+    width: 641px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 42px;
+  }
+
+  #s-container #s_kw_wrap {
+    position: relative;
+  }
+
+  #s-container .s_ipt {
+    border: 1px solid #b6b6b6;
+    border-color: #7b7b7b #b6b6b6 #b6b6b6 #7b7b7b;
+    background: #fff;
+    display: inline-block;
+    vertical-align: top;
+    width: 539px;
+    height: 32px;
+    margin-right: 0;
+    border-right-width: 0;
+    border-color: #b8b8b8 transparent #ccc #b8b8b8;
+    overflow: hidden;
+  }
+
+  #s-container .s_btn {
+    cursor: pointer;
+    width: 100px;
+    height: 36px;
+    color: #fff;
+    font-size: 15px;
+    letter-spacing: 1px;
+    background: #3385ff;
+    border-bottom: 1px solid #2d78f4;
+    outline: medium;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+    border: 0;
+    padding: 0;
+  }
+</style>
+
+<div id="s-content">
+  <div id="s-skin-container"></div>
+  <div id="s-container">
+    <img id="s_lg_img" src="https://www.baidu.com/img/bd_logo1.png" width="270" height="129"><br/><br />
+    <form action="/search.html" method="get">
+      <input type="text" name="key" class="s_ipt" maxlength="100"><input type="submit" value="百度一下" class="s_btn">
+    </form>
+  </div>
+</div>

@@ -2,3 +2,15 @@
 <div>
   <%= @content %>
 </div>
+<div>
+  <% if @prev_catalog.nil? %>
+      <a onclick="return false">上一章</a>
+  <% else %>
+      <a href="/<%= @catalog.book_id %>/<%= @prev_catalog.catalog_id %>.html">上一章</a>
+  <% end %>
+  <% if @next_catalog.nil? %>
+      <a onclick="return false">下一章</a>
+  <% else %>
+      <a href="/<%= @catalog.book_id %>/<%= @next_catalog.catalog_id %>.html">下一章</a>
+  <% end %>
+</div>
