@@ -28,7 +28,13 @@ end
 
 get '/search.html' do
   key = params['key']
-  @books = Book.all(:title.like => "%#{key}%")
+  if key==''
+    @title = '完本小说'
+    @books = Book.all(:close => 1)
+  else
+    @title = "search: `#{key}`"
+    @books = Book.all(:title.like => "%#{key}%")
+  end
   erb :books
 end
 
@@ -59,3 +65,34 @@ get '/:book_id/:catalog_id.html' do
 
   erb :detail
 end
+
+
+# <script>
+#   var target_src = '<%= @catalog.src %>';
+#
+#   $(function(){
+#
+#   $.ajaxPrefilter( function (options) {
+#     if (options.crossDomain && jQuery.support.cors) {
+#         var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
+#     options.url = http + '//cors-anywhere.herokuapp.com/' + options.url;
+#     //options.url = "http://cors.corsproxy.io/url=" + options.url;
+#     }
+#     });
+#     $.ajax({
+#                async: false,
+#                type: "get",
+#                url: target_src,
+#                data: "",
+#                timeout: 3000,
+#                contentType: "text/html;charset=utf-8",
+#                beforeSend: function (xhr) {
+#                  xhr.setRequestHeader('X-Requested-With', 'x-requested-with');
+#                },
+#                success: function(data) {
+#                  $("#book-content").html($(data).find("div#content").html().replace(/<br>　　<br>/g, '<br>'));
+#                }
+#            });
+#
+#     })
+# </script>

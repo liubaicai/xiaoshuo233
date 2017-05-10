@@ -1,13 +1,14 @@
 <h4><%= @catalog.title %></h4>
-<div>
+<div id="book-content">
   <%= @content %>
 </div>
-<div>
+<div class="text-center">
   <% if @prev_catalog.nil? %>
       <a onclick="return false">上一章</a>
   <% else %>
       <a href="/<%= @catalog.book_id %>/<%= @prev_catalog.catalog_id %>.html">上一章</a>
   <% end %>
+   |
   <% if @next_catalog.nil? %>
       <a onclick="return false">下一章</a>
   <% else %>
