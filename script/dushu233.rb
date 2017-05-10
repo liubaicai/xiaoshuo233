@@ -87,9 +87,10 @@ begin
   m_host = 'http://m.qu.la/book'
 
   $logger.info('Start Update......')
+  error = 0
   (1..30000).each do |index|
 
-    error = 0
+    j = 0
     begin
       book = Book.where(:id => index).first
       if !book.nil? && book.close==1
@@ -154,10 +155,15 @@ begin
 
         CheckIsClose(m_url,book,$logger)
 
+      else
+        error = error+1
+        if error>10
+          break
+        end
       end
     rescue Exception => e
-      error = error+1
-      if error<10
+      j = j+1
+      if j<10
         retry
       end
       $logger.error(e)
