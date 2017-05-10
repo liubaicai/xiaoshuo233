@@ -87,8 +87,9 @@ begin
   m_host = 'http://m.qu.la/book'
 
   $logger.info('Start Update......')
-  error = 0
   (1..30000).each do |index|
+
+    error = 0
     begin
       book = Book.where(:id => index).first
       if !book.nil? && book.close==1
@@ -98,7 +99,7 @@ begin
 
       url = "#{host}/#{index.to_s}/"
       m_url = "#{m_host}/#{index.to_s}/"
-      doc = Nokogiri::HTML(open(url), nil, "UTF-8")
+      doc = Nokogiri::HTML(open(url), nil, 'UTF-8')
       title = doc.css('div#info h1')
       author = doc.css('div#info p').first
 
@@ -125,6 +126,7 @@ begin
         $logger.info("downloading:#{index}:#{title.inner_html}")
 
         nodes.each do |node|
+
           i = 0
           begin
             unless node.css('a')[0].nil?
@@ -142,31 +144,30 @@ begin
             end
           rescue Exception => e
             i = i+1
-            if i<100
+            if i<10
               retry
             end
             $logger.error(e)
           end
+
         end
 
         CheckIsClose(m_url,book,$logger)
-      else
-        if error>=100
-          break
-        end
-        error = error + 1
+
       end
     rescue Exception => e
       error = error+1
-      if error<100
+      if error<10
         retry
       end
       $logger.error(e)
     end
+
   end
   $logger.info('Close Update.')
 
   if File.exist?('dushu233.pid')
     File.delete('dushu233.pid')
   end
+
 end

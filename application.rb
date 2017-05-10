@@ -1,6 +1,7 @@
 require "rubygems"
 require "bundler/setup"
 require "sinatra"
+require 'sinatra/reloader'
 require 'net/http'
 require 'open-uri'
 require 'nokogiri'
