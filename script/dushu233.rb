@@ -110,7 +110,7 @@ begin
           book.id = index
         end
         book.title = title.inner_html.encode('UTF-8')
-        book.author = author.inner_html.encode('UTF-8').delete('作&nbsp;&nbsp;者：')
+        book.author = author.inner_html.encode('UTF-8').delete('作&nbsp;&nbsp;者：').gsub(/\A\p{Space}*|\p{Space}*\z/, '')
         book.save
         nodes = doc.css('dd')
         book_id = book.id
