@@ -1,12 +1,24 @@
 require 'rubygems'
 require 'bundler/setup'
+require 'sinatra'
+require 'sinatra/reloader'
 require 'dotenv'
+
 require 'dm-core'
 require 'dm-timestamps'
 require 'dm-validations'
 require 'dm-aggregates'
 require 'dm-migrations'
+require 'dm-serializer'
+
 require 'ostruct'
+require 'net/http'
+require 'open-uri'
+require 'nokogiri'
+
+require 'will_paginate'
+require 'will_paginate/data_mapper'
+require 'will_paginate-bootstrap'
 
 require 'sinatra' unless defined?(Sinatra)
 

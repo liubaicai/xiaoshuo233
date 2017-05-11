@@ -1,6 +1,6 @@
 source 'https://gems.ruby-china.org/'
 gem 'sinatra'
-gem 'sinatra-reloader'
+gem 'sinatra-contrib'
 gem 'json', '>= 1.8.3'
 gem 'dotenv'
 gem 'rake'
@@ -12,6 +12,8 @@ gem 'dm-validations'
 gem 'dm-aggregates'
 gem 'dm-migrations'
 gem 'nokogiri'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 
 group :development do
   gem 'foreman'

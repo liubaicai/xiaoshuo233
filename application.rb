@@ -1,11 +1,5 @@
 require "rubygems"
-require "bundler/setup"
-require "sinatra"
-require 'sinatra/reloader'
-require 'net/http'
-require 'open-uri'
-require 'nokogiri'
-require 'dm-serializer'
+
 require File.join(File.dirname(__FILE__), "environment")
 
 configure do
@@ -39,11 +33,16 @@ get '/search.html' do
 end
 
 get '/books.html' do
-  @books = Book.all
+  @books = Book.all.paginate(:page => params[:page], :per_page => 100)
   erb :books
 end
-get '/books.json' do
-  books = Book.all
+
+get '/books/all.html' do
+  @books = Book.paginate(:page => params[:page], :per_page => 100)
+  erb :books_all
+end
+get '/books/all.json' do
+  books = Book.paginate(:page => params[:page], :per_page => 100)
   books.to_json
 end
 
