@@ -157,7 +157,7 @@ begin
 
       else
         error = error+1
-        if error>10
+        if error>1000
           break
         end
       end

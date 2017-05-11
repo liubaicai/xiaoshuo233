@@ -1,6 +1,6 @@
 <h4><%= @catalog.title %></h4>
 <div id="book-content">
-
+  <%= @content %>
 </div>
 <div class="text-center">
   <% if @prev_catalog.nil? %>
@@ -8,41 +8,10 @@
   <% else %>
       <a href="/<%= @catalog.book_id %>/<%= @prev_catalog.catalog_id %>.html">上一章</a>
   <% end %>
-   |
+  <- <a href="/<%= @catalog.book_id %>.html">目录</a> ->
   <% if @next_catalog.nil? %>
       <a onclick="return false">下一章</a>
   <% else %>
       <a href="/<%= @catalog.book_id %>/<%= @next_catalog.catalog_id %>.html">下一章</a>
   <% end %>
 </div>
-
-
-<script>
-  var target_src = '<%= @catalog.src %>';
-
-  $(function(){
-
-    $.ajaxPrefilter( function (options) {
-      if (options.crossDomain && jQuery.support.cors) {
-        var http = (window.location.protocol === 'http:' ? 'http:' : 'https:');
-        options.url = http + '//cors2anywhere.herokuapp.com/' + options.url;
-        //options.url = "http://cors.corsproxy.io/url=" + options.url;
-      }
-    });
-    $.ajax({
-      async: false,
-      type: "get",
-      url: target_src,
-      data: "",
-      timeout: 30000,
-      contentType: "text/html;charset=utf-8",
-      beforeSend: function (xhr) {
-        xhr.setRequestHeader('X-Requested-With', 'x-requested-with');
-      },
-      success: function(data) {
-        $("#book-content").html($(data).find("div#content").html().replace(/<br>　　<br>/g, '<br>'));
-      }
-    });
-
-  })
-</script>
