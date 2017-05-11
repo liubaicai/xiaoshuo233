@@ -70,7 +70,7 @@ get '/:book_id/:catalog_id.html' do
   if !Dir.exist?(cache_dir)
     Dir.mkdir(cache_dir)
   end
-  if !File.exist?(cache_file) || (File.mtime(cache_file) < (Time.now - 3600*24*5))
+  if !File.exist?(cache_file) #|| (File.mtime(cache_file) < (Time.now - 3600*24*5))
     File.open(cache_file,'w'){ |f| f << html }
   end
 
