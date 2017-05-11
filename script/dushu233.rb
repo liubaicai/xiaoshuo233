@@ -3,8 +3,7 @@
 require 'open-uri'
 require 'nokogiri'
 
-require  'sqlite3'
-require  'active_record'
+require 'data_mapper'
 
 require 'logger'
 
@@ -31,42 +30,32 @@ pid_txt.close
 $logger = Logger.new(STDOUT)
 $logger.datetime_format = '%Y-%m-%d %H:%M:%S'
 
-ActiveRecord::Base.establish_connection(
-    :adapter => 'sqlite3',
-    :database => 'dushu233.sqlite')
+class Book
+  include DataMapper::Resource
 
-ActiveRecord::Schema.define(version: 20170509144500) do
+  property :id,         Serial
+  property :title,      String
+  property :author,     String
+  property :close,      Integer,    :default  => 0
 
-  unless table_exists?('books')
-    create_table 'books', force: :cascade do |t|
-      t.string   'title'
-      t.string   'author'
-      t.integer  'close' ,  default: 0
-    end
-  end
-
-  unless table_exists?('catalogs')
-    create_table 'catalogs', force: :cascade do |t|
-      t.integer   'book_id'
-      t.integer   'catalog_id'
-      t.string   'title'
-      t.string   'src'
-    end
-
-    add_index 'catalogs', ['book_id'], name: 'index_books_on_catalogs_id'
-  end
-
+  has n, :catalogs
 end
 
-class Book < ActiveRecord::Base
-  has_many :catalogs
+class Catalog
+  include DataMapper::Resource
 
-end
+  property :id,         Serial
+  property :book_id,    Integer,    :index => :index_books_on_catalogs_id
+  property :catalog_id, Integer
+  property :title,      String
+  property :src,        String
 
-class Catalog < ActiveRecord::Base
   belongs_to :book
-
 end
+
+DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{File.expand_path(File.dirname(__FILE__))}/dushu233.sqlite"))
+DataMapper.finalize
+DataMapper.auto_upgrade!
 
 def CheckIsClose m_url,book,logger
   begin
@@ -92,7 +81,7 @@ begin
 
     j = 0
     begin
-      book = Book.where(:id => index).first
+      book = Book.first(:id => index)
       if !book.nil? && book.close==1
         $logger.info("close:#{index}:#{book.title}")
         next
@@ -116,8 +105,8 @@ begin
         book_id = book.id
 
         last_node = nodes.last
-        catalog_id = last_node.css('a')[0]['href'].split('/').last.delete('^0-9')
-        catalog = Catalog.where(:book_id => book_id, :catalog_id=> catalog_id).take
+        catalog_id = last_node.css('a')[0]['href'].split('/').last.delete('^0-9').to_i
+        catalog = Catalog.first(:book_id => book_id, :catalog_id=> catalog_id)
         unless catalog.nil?
           CheckIsClose(m_url,book,$logger)
           $logger.info("downloaded:#{index}:#{title.inner_html}")
@@ -132,8 +121,8 @@ begin
           begin
             unless node.css('a')[0].nil?
               catalog_title = node.text.delete('/\:*?"<>|')
-              catalog_id = node.css('a')[0]['href'].split('/').last.delete('^0-9')
-              catalog = Catalog.where(:book_id => book_id, :catalog_id=> catalog_id).take
+              catalog_id = node.css('a')[0]['href'].split('/').last.delete('^0-9').to_i
+              catalog = Catalog.first(:book_id => book_id, :catalog_id=> catalog_id)
               if catalog.nil?
                 catalog = Catalog.new
               end
