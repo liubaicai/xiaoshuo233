@@ -36,9 +36,12 @@ class Book
   property :id,         Serial
   property :title,      String
   property :author,     String
+  property :description,String,     :default  => '',        :length => 500
+  property :category_id,Integer,    :index => :index_books_on_category_id
   property :close,      Integer,    :default  => 0
 
   has n, :catalogs
+  belongs_to :category
 end
 
 class Catalog
@@ -53,22 +56,18 @@ class Catalog
   belongs_to :book
 end
 
+class Category
+  include DataMapper::Resource
+
+  property :id,         Serial
+  property :title,      String
+
+  has n, :books
+end
+
 DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{File.expand_path(File.dirname(__FILE__))}/dushu233.sqlite"))
 DataMapper.finalize
 DataMapper.auto_upgrade!
-
-def CheckIsClose m_url,book,logger
-  begin
-    mdoc = Nokogiri::HTML(open(m_url), nil, 'UTF-8')
-    if mdoc.inner_html.include?('状态：完成')
-      book.close = 1
-      book.save
-      logger.info("close:#{book.title}")
-    end
-  rescue Exception => e
-    logger.error(e)
-  end
-end
 
 begin
 
@@ -90,17 +89,32 @@ begin
       url = "#{host}/#{index.to_s}/"
       m_url = "#{m_host}/#{index.to_s}/"
       doc = Nokogiri::HTML(open(url), nil, 'UTF-8')
-      title = doc.css('div#info h1')
-      author = doc.css('div#info p').first
+      title = doc.css('meta[property="og:title"]').attribute('content').to_s.encode('UTF-8')
+      author = doc.css('meta[property="og:novel:author"]').attribute('content').to_s.encode('UTF-8')
+      category = doc.css('meta[property="og:novel:category"]').attribute('content').to_s.encode('UTF-8')
+      description = doc.css('meta[property="og:description"]').attribute('content').to_s.encode('UTF-8')
+      status = doc.css('meta[property="og:novel:status"]').attribute('content').to_s.encode('UTF-8')
+
+      cate = Category.first(:title => category)
+      if cate.nil?
+        cate = Category.new
+        cate.title = category
+        cate.save
+      end
 
       unless title.nil? || title.to_s==''
         if book.nil?
           book = Book.new
           book.id = index
         end
-        book.title = title.inner_html.encode('UTF-8')
-        book.author = author.inner_html.encode('UTF-8').delete('作&nbsp;&nbsp;者：').gsub(/\A\p{Space}*|\p{Space}*\z/, '')
+        book.title = title
+        book.author = author
+        book.description = description
+        book.category_id = cate.id
         book.save
+
+        $logger.info("downloading:#{index}:#{title}")
+
         nodes = doc.css('dd')
         book_id = book.id
 
@@ -108,12 +122,14 @@ begin
         catalog_id = last_node.css('a')[0]['href'].split('/').last.delete('^0-9').to_i
         catalog = Catalog.first(:book_id => book_id, :catalog_id=> catalog_id)
         unless catalog.nil?
-          CheckIsClose(m_url,book,$logger)
-          $logger.info("downloaded:#{index}:#{title.inner_html}")
+          if status=='完成'
+            book.close = 1
+            book.save
+            $logger.info("close:#{book.title}")
+            next
+          end
           next
         end
-
-        $logger.info("downloading:#{index}:#{title.inner_html}")
 
         nodes.each do |node|
 
@@ -142,8 +158,11 @@ begin
 
         end
 
-        CheckIsClose(m_url,book,$logger)
-
+        if status=='完成'
+          book.close = 1
+          book.save
+          $logger.info("close:#{book.title}")
+        end
       else
         error = error+1
         if error>1000
