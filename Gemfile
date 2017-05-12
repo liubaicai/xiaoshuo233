@@ -17,6 +17,8 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'rufus-scheduler'
 
+gem 'tzinfo-data', platforms: [:mingw, :mswin]
+
 group :development do
   gem 'foreman'
 end

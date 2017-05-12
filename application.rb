@@ -17,6 +17,8 @@ end
 
 # root page
 get '/' do
+  @books_hot = Book.all(:order => [ :views.desc ],:limit => 10)
+  @categories = Category.all
   erb :index
 end
 
@@ -51,7 +53,8 @@ get '/:book_id.html' do
   @title = "#{@book.title}_#{@book.title}最新章节_#{@book.author.trim}_#{SiteConfig.site_name}"
   @keywords = "#{@book.title},#{@book.title}最新章节,#{@book.author.trim}"
   @description = "#{@book.title}最新章节由网友提供，《#{@book.title}》情节跌宕起伏、扣人心弦，是一本情节与文笔俱佳的网络小说，#{SiteConfig.site_name}免费提供#{@book.title}最新清爽干净的文字章节在线阅读。"
-
+  @book.views = @book.views+1
+  @book.save
   erb :catalogs
 end
 

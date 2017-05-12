@@ -1,8 +1,14 @@
 
+/*html {*/
+    /*color: #000;*/
+    /*background: #F1F1F1;*/
+/*}*/
+
 html {
     height: 100%;
     overflow-y: scroll;
 }
+
 body {
     font-size: 18px;
     line-height: 1.618;
@@ -10,13 +16,20 @@ body {
     color: #1B1B1B;
     font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans CJK SC,WenQuanYi Micro Hei,Arial,sans-serif;
 }
-#header {
+.header {
     /*text-align: center;*/
     /*border-bottom: 3px solid #000;*/
+    width: 96%;
+    max-width: 900px;
+    margin:0 auto;
+    text-align:center;
 }
 .content {
-    margin: 30px 0;
     padding: 0;
+    width: 96%;
+    max-width: 900px;
+    margin:30px auto;
+    text-align:center;
 }
 .footer {
     padding: 0;
@@ -47,20 +60,23 @@ a:hover {
     text-decoration: none;
 }
 
-
+#s-container {
+    width: 96%;
+    max-width: 900px;
+    text-align:left;
+}
 
 .s_ipt {
     border: 1px solid #b6b6b6;
-    border-color: #7b7b7b #b6b6b6 #b6b6b6 #7b7b7b;
     background: #fff;
     display: inline-block;
     vertical-align: top;
     width: 65%;
     max-width: 538px;
     height: 36px;
-    margin-right: -5px;
+    margin-right: 0px;
     padding-left: 10px;
-    border-right-width: 0;
+    padding-right: 10px;
     overflow: hidden;
 }
 
@@ -79,4 +95,5 @@ a:hover {
     -webkit-border-radius: 0;
     border: 0;
     padding: 0;
+    margin-left: -8px;
 }

@@ -1,8 +1,4 @@
 /*http://www.bqg5200.com/*/
-html {
-    color: #000;
-    background: #F1F1F1;
-}
 
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,button,input,textarea,p {
     margin: 0;
@@ -11,7 +7,7 @@ body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,button,input,textarea,p {
 
 body {
     font-size: 12px;
-    font-family: "宋体",Arial,Helvetica,sans-serif;
+    font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans CJK SC,WenQuanYi Micro Hei,Arial,sans-serif;
 }
 
 a {
@@ -441,12 +437,12 @@ h1,h2,h3,h4,h5,h6 {
 
 .index_toplist {
     float: left;
-    width: 240px;
-    _width: 237px;
+    width: 300px;
 }
 
 .mright {
-    margin-right: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .toptab {
@@ -489,7 +485,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .topbook ul li span.hits,.index_top ul li span.hits,.topbooks ul li span.hits {
-    width: 40px;
+    /*width: 40px;*/
     float: right;
     text-align: right;
     font-family: "Verdana";
