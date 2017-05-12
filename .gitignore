@@ -56,4 +56,5 @@ build-iPhoneSimulator/
 /public/*
 !/public/styles
 !/public/scripts
+!/public/images
 !/public/favicon.ico
