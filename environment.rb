@@ -3,6 +3,7 @@ require 'bundler/setup'
 require 'sinatra'
 require 'sinatra/reloader'
 require 'dotenv'
+require 'dotenv/load'
 
 require 'dm-core'
 require 'dm-timestamps'

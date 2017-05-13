@@ -17,9 +17,30 @@ end
 
 # root page
 get '/' do
-  @books_hot = Book.all(:order => [ :views.desc ],:limit => 10)
-  @categories = Category.all
-  erb :index
+
+  cache_file = "#{File.dirname(__FILE__)}/tmp/cache_html/index.html"
+  cache_dir = "#{File.dirname(__FILE__)}/tmp/cache_html"
+
+  if File.exist?(cache_file) && (File.mtime(cache_file) >= (Time.now - 3600))
+    IO.read(cache_file)
+  else
+
+    @books_hot = Book.all(:category.not => nil,:order => [ :views.desc ],:limit => 10)
+    @catalog_update = Catalog.all(:fields => [:book_id], :unique => true, :order => [:book_id.desc], :limit => 10)
+    @categories = Category.all
+
+    html = erb :index
+
+    if !Dir.exist?(cache_dir)
+      Dir.mkdir(cache_dir)
+    end
+    if !File.exist?(cache_file) #|| (File.mtime(cache_file) < (Time.now - 3600))
+      File.open(cache_file,'w'){ |f| f << html.encode('UTF-8') }
+    end
+
+    html
+
+  end
 end
 
 get '/search.html' do
@@ -60,30 +81,37 @@ end
 
 get '/:book_id/:catalog_id.html' do
 
-  @catalog = Catalog.first(:book_id => params['book_id'].to_i , :catalog_id => params['catalog_id'].to_i)
+  cache_file = "#{File.dirname(__FILE__)}/tmp/cache_html/#{params['book_id']}/#{params['catalog_id']}.html"
+  cache_dir = "#{File.dirname(__FILE__)}/tmp/cache_html/#{params['book_id']}"
 
-  doc = Nokogiri::HTML(open(@catalog.src), nil, 'UTF-8')
-  n = doc.css('div#content')[0]
-  n.search('script').remove
-  @content = n.inner_html.gsub!('<br>　　<br>', '<br>')
+  if File.exist?(cache_file) && (File.mtime(cache_file) >= (Time.now - 3600*24*7))
+    IO.read(cache_file)
+  else
 
-  @next_catalog = Catalog.first(:book_id => params['book_id'].to_i , :catalog_id.gt => params['catalog_id'].to_i)
-  @prev_catalog = Catalog.last(:book_id => params['book_id'].to_i , :catalog_id.lt => params['catalog_id'].to_i)
+    @catalog = Catalog.first(:book_id => params['book_id'].to_i , :catalog_id => params['catalog_id'].to_i)
 
-  @title = "#{@catalog.title}_#{@catalog.book.title}_#{SiteConfig.site_name}"
-  @keywords = "#{@catalog.book.title}, #{@catalog.title}"
-  @description = "#{SiteConfig.site_name}提供了#{@catalog.book.author.trim}创作的小说《#{@catalog.book.title}》干净清爽无错字的文字章节： #{@catalog.title}在线阅读。"
+    doc = Nokogiri::HTML(open(@catalog.src), nil, 'UTF-8')
+    n = doc.css('div#content')[0]
+    n.search('script').remove
+    @content = n.inner_html.gsub!('<br>　　<br>', '<br>')
 
-  html = erb :detail
+    @next_catalog = Catalog.first(:book_id => params['book_id'].to_i , :catalog_id.gt => params['catalog_id'].to_i)
+    @prev_catalog = Catalog.last(:book_id => params['book_id'].to_i , :catalog_id.lt => params['catalog_id'].to_i)
 
-  cache_file = "#{File.dirname(__FILE__)}/public/#{params['book_id']}/#{params['catalog_id']}.html"
-  cache_dir = "#{File.dirname(__FILE__)}/public/#{params['book_id']}"
-  if !Dir.exist?(cache_dir)
-    Dir.mkdir(cache_dir)
+    @title = "#{@catalog.title}_#{@catalog.book.title}_#{SiteConfig.site_name}"
+    @keywords = "#{@catalog.book.title}, #{@catalog.title}"
+    @description = "#{SiteConfig.site_name}提供了#{@catalog.book.author.trim}创作的小说《#{@catalog.book.title}》干净清爽无错字的文字章节： #{@catalog.title}在线阅读。"
+
+    html = erb :detail
+
+    if !Dir.exist?(cache_dir)
+      Dir.mkdir(cache_dir)
+    end
+    if !File.exist?(cache_file) #|| (File.mtime(cache_file) < (Time.now - 3600*24*5))
+      File.open(cache_file,'w'){ |f| f << html.encode('UTF-8') }
+    end
+
+    html
+
   end
-  if !File.exist?(cache_file) #|| (File.mtime(cache_file) < (Time.now - 3600*24*5))
-    File.open(cache_file,'w'){ |f| f << html.encode('UTF-8') }
-  end
-
-  html
 end

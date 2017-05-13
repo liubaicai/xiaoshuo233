@@ -52,9 +52,3 @@ build-iPhoneSimulator/
 
 /.idea/
 *.sqlite
-
-/public/*
-!/public/styles
-!/public/scripts
-!/public/images
-!/public/favicon.ico

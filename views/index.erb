@@ -6,7 +6,7 @@
 
     <div class="index_toplist mright">
       <div class="toptab">
-        <span>精品排行</span>
+        <span>点击排行</span>
       </div>
       <div class="index_top">
         <ul>
@@ -16,6 +16,44 @@
                 <span class="hits"><%= book.author %></span>
                 <span class="genre">[<%= book.category.title %>]</span>
                 <a href="/<%= book.id %>.html" target="_blank"><%= book.title %></a>
+              </li>
+          <% end %>
+
+        </ul>
+      </div>
+    </div>
+
+    <div class="index_toplist mright">
+      <div class="toptab">
+        <span>编辑推荐</span>
+      </div>
+      <div class="index_top">
+        <ul>
+
+          <% @books_hot.each do |book| %>
+              <li>
+                <span class="hits"><%= book.author %></span>
+                <span class="genre">[<%= book.category.title %>]</span>
+                <a href="/<%= book.id %>.html" target="_blank"><%= book.title %></a>
+              </li>
+          <% end %>
+
+        </ul>
+      </div>
+    </div>
+
+    <div class="index_toplist mright">
+      <div class="toptab">
+        <span>最近更新</span>
+      </div>
+      <div class="index_top">
+        <ul>
+
+          <% @catalog_update.each do |catalog| %>
+              <li>
+                <span class="hits"><%= catalog.book.author %></span>
+                <span class="genre">[<%= catalog.book.category.title %>]</span>
+                <a href="/<%= catalog.book.id %>.html" target="_blank"><%= catalog.book.title %></a>
               </li>
           <% end %>
 

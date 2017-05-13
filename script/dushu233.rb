@@ -77,7 +77,7 @@ begin
 
   $logger.info('Start Update......')
   error = 0
-  (1..30000).each do |index|
+  (1..50000).each do |index|
 
     j = 0
     begin
@@ -90,20 +90,22 @@ begin
       url = "#{host}/#{index.to_s}/"
       m_url = "#{m_host}/#{index.to_s}/"
       doc = Nokogiri::HTML(open(url), nil, 'UTF-8')
-      title = doc.css('meta[property="og:title"]').attribute('content').to_s.encode('UTF-8')
-      author = doc.css('meta[property="og:novel:author"]').attribute('content').to_s.encode('UTF-8')
-      category = doc.css('meta[property="og:novel:category"]').attribute('content').to_s.encode('UTF-8')
-      description = doc.css('meta[property="og:description"]').attribute('content').to_s.encode('UTF-8')
-      status = doc.css('meta[property="og:novel:status"]').attribute('content').to_s.encode('UTF-8')
+      title_node = doc.css('meta[property="og:title"]')
 
-      cate = Category.first(:title => category)
-      if cate.nil?
-        cate = Category.new
-        cate.title = category
-        cate.save
-      end
+      unless title_node.nil? || title_node.to_s==''
 
-      unless title.nil? || title.to_s==''
+        title = doc.css('meta[property="og:title"]').attribute('content').to_s.encode('UTF-8')
+        author = doc.css('meta[property="og:novel:author"]').attribute('content').to_s.encode('UTF-8')
+        category = doc.css('meta[property="og:novel:category"]').attribute('content').to_s.encode('UTF-8')
+        description = doc.css('meta[property="og:description"]').attribute('content').to_s.encode('UTF-8')
+        status = doc.css('meta[property="og:novel:status"]').attribute('content').to_s.encode('UTF-8')
+
+        cate = Category.first(:title => category)
+        if cate.nil?
+          cate = Category.new
+          cate.title = category
+          cate.save
+        end
         if book.nil?
           book = Book.new
           book.id = index
