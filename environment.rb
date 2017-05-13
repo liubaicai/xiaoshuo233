@@ -23,6 +23,8 @@ require 'will_paginate-bootstrap'
 
 require 'sinatra' unless defined?(Sinatra)
 
+require 'chinese_pinyin'
+
 require 'rufus-scheduler'
 
 Dotenv.load

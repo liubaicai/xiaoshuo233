@@ -1,3 +1,5 @@
+#encoding: UTF-8
+
 require "rubygems"
 
 require File.join(File.dirname(__FILE__), "environment")
@@ -13,6 +15,9 @@ end
 
 helpers do
   # add your helpers here
+  def pinyin chstr
+    Pinyin.t(chstr, splitter: '')
+  end
 end
 
 # root page
@@ -21,10 +26,11 @@ get '/' do
   cache_file = "#{File.dirname(__FILE__)}/tmp/cache_html/index.html"
   cache_dir = "#{File.dirname(__FILE__)}/tmp/cache_html"
 
-  if File.exist?(cache_file) && (File.mtime(cache_file) >= (Time.now - 3600))
+  if File.exist?(cache_file) && (File.mtime(cache_file) >= (Time.now - 3600)) && false
     IO.read(cache_file)
   else
 
+    @books_recommend = Book.all(:category.not => nil,:order => [ :views.desc ],:limit => 6)
     @books_hot = Book.all(:category.not => nil,:order => [ :views.desc ],:limit => 10)
     @catalog_update = Catalog.all(:fields => [:book_id], :unique => true, :order => [:book_id.desc], :limit => 10)
     @categories = Category.all

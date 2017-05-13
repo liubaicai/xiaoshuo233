@@ -17,12 +17,16 @@
   <body>
     <div class="container-fluid">
       <div class="header">
-        <div id="s-container">
-          <img id="s_lg_img" class="text-center" src="/images/logo.png" style="width:200px;height:60px;">
-          <form id="s-form" class="text-center" action="/search.html" method="get">
-            <input type="text" name="key" placeholder="请输入您要搜索的关键字" class="s_ipt" maxlength="100">
-            <input type="submit" value="摆渡一下" class="s_btn">
-          </form>
+        <div id="row" style="text-align:left;">
+          <div class="col-sm-4">
+            <img class="s_lg_img" class="text-left" src="/images/logo.png" style="width:200px;height:60px;">
+          </div>
+          <div class="col-sm-8">
+            <form class="s-form" class="text-right" action="/search.html" method="get">
+              <input type="text" name="key" placeholder="请输入您要搜索的关键字" class="s_ipt" maxlength="100">
+              <input type="submit" value="摆渡一下" class="s_btn">
+            </form>
+          </div>
         </div>
       </div>
       <div class="content">

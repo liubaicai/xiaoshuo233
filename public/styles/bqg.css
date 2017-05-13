@@ -51,12 +51,6 @@ h1,h2,h3,h4,h5,h6 {
     display: none;
 }
 
-#header {
-    width: 990px;
-    margin: auto;
-    text-align: left;
-}
-
 #header .top {
     background: none repeat scroll 0 0 #e5e5e5;
     border: 1px solid #d8d8d8;
@@ -181,7 +175,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .nav {
-    width: 990px;
+    width: 920px;
     height: 38px;
     font-weight: bold;
     font-size: 14px;
@@ -191,7 +185,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .nav ul {
-    width: 990px;
+    width: 920px;
     margin: 0;
 }
 
@@ -229,14 +223,13 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 #main {
-    width: 990px;
-    margin: 10px auto;
-    _width: 988px;
+    /*width: 920px;*/
+    margin: 5px;
 }
 
 .layout {
     margin: 0 auto;
-    width: 990px;
+    width: 920px;
 }
 
 .qire-notice {
@@ -268,9 +261,8 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .w_980 {
-    width: 990px;
+    width: 920px;
     margin-top: 10px;
-;_width: 988px;
 }
 
 .tabstit {
@@ -309,14 +301,15 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .recombook {
-    height: 380px;
+    /*height: 360px;*/
+    margin-bottom: 10px;
 }
 
 .recombook dl {
     width: 300px;
     float: left;
-    padding: 14px 12px;
-    height: 160px;
+    padding: 10px;
+    height: 165px;
     overflow: hidden;
     position: relative;
 }
@@ -324,18 +317,17 @@ h1,h2,h3,h4,h5,h6 {
 .recombook dl dt {
     float: left;
     width: 130px;
-    height: 170px;
-    margin-right: 12px;
+    height: 160px;
 }
 
 .recombook dl dt img {
-    height: 158px;
-    width: 128px;
+    height: 150px;
+    width: 120px;
 }
 
 .recombook dl dd {
     float: left;
-    width: 158px;
+    width: 145px;
     line-height: 21px;
     color: #777777;
 }
@@ -431,8 +423,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 #index_last {
-    /*width: 990px;*/
-    /*margin: 10px auto;*/
+
 }
 
 .index_toplist {
@@ -582,16 +573,9 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 .bottoma {
-    width: 990px;
+    width: 920px;
     margin: 0 auto;
     margin-bottom: 10px;
-}
-
-#footer {
-    width: 990px;
-    margin: 0 auto;
-    overflow: hidden;
-    margin-top: 10px;
 }
 
 .friendLink {
@@ -636,7 +620,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 #conn {
-    width: 990px;
+    width: 920px;
     margin: 0 auto
 }
 
@@ -738,7 +722,9 @@ h1,h2,h3,h4,h5,h6 {
 
 .recombook dl dd.name,.recomclass dl dd.name {
     color: #999;
-    height: 88px;
+    height: 80px;
+    overflow:hidden;
+    text-overflow: ellipsis;
 }
 
 .listbox li {
@@ -807,7 +793,7 @@ h1,h2,h3,h4,h5,h6 {
 
 #maininfo {
     margin: 10px auto;
-    width: 990px;
+    width: 920px;
 }
 
 .w_770 {
@@ -1068,7 +1054,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 #allList,#newlist {
-    width: 990px;
+    width: 920px;
     margin: 0 auto 10px;
     float: none;
     background: none;
@@ -1122,7 +1108,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 #product {
-    width: 990px;
+    width: 920px;
     margin: 10px auto;
     float: none;
 }
@@ -1356,13 +1342,13 @@ h1,h2,h3,h4,h5,h6 {
 
 #container {
     margin: 0 auto;
-    width: 990px;
+    width: 920px;
     text-align: left;
     zoom: 1;
 }
 
 .comments_r {
-    width: 990px;
+    width: 920px;
     margin: 0 auto;
     border: 1px dotted #C0C6CB;
     border-bottom: none;
