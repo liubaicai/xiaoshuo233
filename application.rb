@@ -26,7 +26,7 @@ get '/' do
   cache_file = "#{File.dirname(__FILE__)}/tmp/cache_html/index.html"
   cache_dir = "#{File.dirname(__FILE__)}/tmp/cache_html"
 
-  if File.exist?(cache_file) && (File.mtime(cache_file) >= (Time.now - 3600)) && false
+  if File.exist?(cache_file) && (File.mtime(cache_file) >= (Time.now - 3600))
     IO.read(cache_file)
   else
 
@@ -40,9 +40,7 @@ get '/' do
     if !Dir.exist?(cache_dir)
       Dir.mkdir(cache_dir)
     end
-    if !File.exist?(cache_file) #|| (File.mtime(cache_file) < (Time.now - 3600))
-      File.open(cache_file,'w'){ |f| f << html.encode('UTF-8') }
-    end
+    File.open(cache_file,'w'){ |f| f << html.encode('UTF-8') }
 
     html
 
@@ -50,13 +48,13 @@ get '/' do
 end
 
 get '/search.html' do
-  key = params['key']
-  if key==''
+  @key = params['key']
+  if @key==''
     @page_title = '完本小说'
     @books = Book.all(:close => 1)
   else
-    @page_title = "search: `#{key}`"
-    @books = Book.all(:title.like => "%#{key}%")
+    @page_title = "search: `#{@key}`"
+    @books = Book.all(:title.like => "%#{@key}%") + Book.all(:author => @key)
   end
   erb :books
 end
@@ -66,11 +64,12 @@ get '/books.html' do
   erb :books
 end
 
-get '/books/all.html' do
+get '/books-all.html' do
+  @page_title = '全部小说'
   @books = Book.paginate(:page => params[:page], :per_page => 100)
   erb :books_all
 end
-get '/books/all.json' do
+get '/books-all.json' do
   books = Book.paginate(:page => params[:page], :per_page => 100)
   books.to_json
 end
@@ -113,9 +112,10 @@ get '/:book_id/:catalog_id.html' do
     if !Dir.exist?(cache_dir)
       Dir.mkdir(cache_dir)
     end
-    if !File.exist?(cache_file) #|| (File.mtime(cache_file) < (Time.now - 3600*24*5))
-      File.open(cache_file,'w'){ |f| f << html.encode('UTF-8') }
-    end
+    # if !File.exist?(cache_file) #|| (File.mtime(cache_file) < (Time.now - 3600*24*5))
+    #   File.open(cache_file,'w'){ |f| f << html.encode('UTF-8') }
+    # end
+    File.open(cache_file,'w'){ |f| f << html.encode('UTF-8') }
 
     html
 

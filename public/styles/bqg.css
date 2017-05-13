@@ -1546,9 +1546,9 @@ ul.links li {
 
 #content {
     line-height: 28px;
-    padding-top: 10px;
+    padding-top: 5px;
     word-wrap: break-word;
-    letter-spacing: 0.2em;
+    /*letter-spacing: 0.2em;*/
     line-height: 150%;
     width: 95%;
     color: #555;
@@ -1591,8 +1591,8 @@ ul.links li {
     text-align: center;
     border-top: 1px dotted #C0C6CB;
     padding: 15px 0;
-    width: 95%;
-    margin: auto
+    /*width: 95%;*/
+    margin-top: 10px;
 }
 
 .jump1 {
@@ -1613,8 +1613,38 @@ ul.links li {
     color: #666;
     font-size: 14px;
     text-decoration: none;
-    background: url(images/window.gif) no-repeat -150px -43px;
+    background: url(/images/window.gif) no-repeat -150px -43px;
     width: 111px;
     height: 35px;
     display: inline-block;
+}
+
+.listlie {
+    border:1px solid #d8d8d8;
+    background:#fff;
+    border-top:none;
+    color:#999;
+    margin-bottom:10px;
+    float:left;
+    height:auto;
+}
+.listlie ul {
+    padding:0px 5px 5px 15px;
+    float:left;
+}
+.listlie ul li {
+    height:32px;
+    overflow:hidden;
+    line-height:32px;
+    width:225px;
+    border-bottom:1px dashed #DCDCDC;
+    list-style:none;
+    font-size:12px;
+    float:left
+}
+.listlie ul li.brunet {
+    background:#f7f7f7;
+}
+.listlie ul li a:visited {
+    color:#f60
 }

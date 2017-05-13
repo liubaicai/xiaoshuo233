@@ -1,17 +1,40 @@
-<h4><%= @catalog.title %></h4>
-<div class="text-left" id="book-content">
-  <%= @content %>
+
+<div id="center" style="background: #fff;border: 1px solid #F1F1F1;">
+  <div class="title">
+    <h1><%= @catalog.title %></h1>
+    作者：
+    <span><%= @catalog.book.author %></span>
+    分类：
+    <span>
+      <%= @catalog.book.category.title %>
+    </span>
+  </div>
+  <div id="content" style="font-size: 20px;">
+    <%= @content %>
+  </div>
+
+  <div class="jump">
+    <div class="jump1">
+      <% if @prev_catalog.nil? %>
+          <a onclick="return false">上一章</a>
+      <% else %>
+          <a href="/<%= @catalog.book_id %>/<%= @prev_catalog.catalog_id %>.html">上一章</a>
+      <% end %>
+      <a href="/<%= @catalog.book_id %>.html">回目录</a>
+      <% if @next_catalog.nil? %>
+          <a onclick="return false">下一章</a>
+      <% else %>
+          <a href="/<%= @catalog.book_id %>/<%= @next_catalog.catalog_id %>.html">下一章</a>
+      <% end %>
+      <div class="bdad">
+        <script>style_ban2();</script>
+
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
 </div>
-<div class="text-center">
-  <% if @prev_catalog.nil? %>
-      <a onclick="return false">上一章</a>
-  <% else %>
-      <a href="/<%= @catalog.book_id %>/<%= @prev_catalog.catalog_id %>.html">上一章</a>
-  <% end %>
-  <- <a href="/<%= @catalog.book_id %>.html">目录</a> ->
-  <% if @next_catalog.nil? %>
-      <a onclick="return false">下一章</a>
-  <% else %>
-      <a href="/<%= @catalog.book_id %>/<%= @next_catalog.catalog_id %>.html">下一章</a>
-  <% end %>
-</div>
+<script>
+    document.oncontextmenu=function(){return false;};
+    document.onselectstart=function(){return false;};
+</script>

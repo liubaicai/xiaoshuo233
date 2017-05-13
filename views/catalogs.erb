@@ -1,6 +1,17 @@
-<h4><%= @book.title %></h4>
-<div class="text-left row">
-  <% @book.catalogs(:order => [ :catalog_id ]).each do |catalog| %>
-      <div class="col-sm-3"><a href='<%= catalog.src %>' target="_blank"><%= catalog.title %></a></div>
-  <% end %>
+
+<div class="row">
+
+  <div class="listlie" style="text-align:left;">
+    <h2><%= @book.title %></h2>
+    <ul>
+
+      <% @book.catalogs(:order => [ :catalog_id ]).each do |catalog| %>
+          <li>
+            <a href='<%= catalog.src %>' target="_blank"><%= catalog.title %></a>
+          </li>
+      <% end %>
+
+    </ul>
+  </div>
+
 </div>

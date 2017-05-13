@@ -6,6 +6,7 @@
     <meta name="description" content="<%= @description || SiteConfig.description %>"/>
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="/styles/main.css" rel="stylesheet" type="text/css"/>
+    <link href="/styles/bqg.css" rel="stylesheet" type="text/css"/>
 
     <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -19,7 +20,10 @@
       <div class="header">
         <div id="row" style="text-align:left;">
           <div class="col-sm-4">
-            <img class="s_lg_img" class="text-left" src="/images/logo.png" style="width:200px;height:60px;">
+            <a href="/">
+              <div class="s_lg_img text-left" style="background:url(/images/logo.png);width:200px;height:60px;">
+              </div>
+            </a>
           </div>
           <div class="col-sm-8">
             <form class="s-form" class="text-right" action="/search.html" method="get">

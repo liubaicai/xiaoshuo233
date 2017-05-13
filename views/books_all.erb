@@ -1,8 +1,20 @@
-<h4><%= @page_title || 'Books' %></h4>
+
 <div class="row">
-  <% @books.each do |book| %>
-      <div class="col-sm-3"><a href='/<%= book.id %>.html'><%= book.title %></a></div>
-  <% end %>
+
+  <div class="listlie" style="text-align:left;">
+    <h2><%= @page_title || 'Books' %></h2>
+    <ul>
+
+      <% @books.each do |book| %>
+          <li>
+            <a href='/<%= book.id %>.html' target="_blank"><%= book.title %></a>
+            (<% if book.close==1 %><font color="#49A9A9">完</font><% else %>载<% end %>) /<%= book.author %>
+          </li>
+      <% end %>
+
+    </ul>
+  </div>
+
 </div>
 <div>
   <%= will_paginate @books, renderer: BootstrapPagination::Sinatra %>
