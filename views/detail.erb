@@ -18,13 +18,13 @@
       <% if @prev_catalog.nil? %>
           <a onclick="return false">上一章</a>
       <% else %>
-          <a href="/<%= @catalog.book_id %>/<%= @prev_catalog.catalog_id %>.html">上一章</a>
+          <a href="/book/<%= @catalog.book_id %>/<%= @prev_catalog.catalog_id %>.html">上一章</a>
       <% end %>
-      <a href="/<%= @catalog.book_id %>.html">回目录</a>
+      <a href="/book/<%= @catalog.book_id %>.html">回目录</a>
       <% if @next_catalog.nil? %>
           <a onclick="return false">下一章</a>
       <% else %>
-          <a href="/<%= @catalog.book_id %>/<%= @next_catalog.catalog_id %>.html">下一章</a>
+          <a href="/book/<%= @catalog.book_id %>/<%= @next_catalog.catalog_id %>.html">下一章</a>
       <% end %>
       <div class="bdad">
         <script>style_ban2();</script>

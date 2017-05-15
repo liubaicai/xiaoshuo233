@@ -74,7 +74,7 @@ get '/books-all.json' do
   books.to_json
 end
 
-get '/:book_id.html' do
+get '/book/:book_id.html' do
   @book = Book.get(params['book_id'].to_i)
   @title = "#{@book.title}_#{@book.title}最新章节_#{@book.author.trim}_#{SiteConfig.site_name}"
   @keywords = "#{@book.title},#{@book.title}最新章节,#{@book.author.trim}"
@@ -84,7 +84,7 @@ get '/:book_id.html' do
   erb :catalogs
 end
 
-get '/:book_id/:catalog_id.html' do
+get '/book/:book_id/:catalog_id.html' do
 
   cache_file = "#{File.dirname(__FILE__)}/tmp/cache_html/#{params['book_id']}/#{params['catalog_id']}.html"
   cache_dir = "#{File.dirname(__FILE__)}/tmp/cache_html/#{params['book_id']}"

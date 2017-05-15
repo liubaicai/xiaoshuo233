@@ -7,7 +7,7 @@
 
       <% @books.each do |book| %>
           <li>
-            <a href='/<%= book.id %>.html' target="_blank"><%= book.title %></a>
+            <a href='/book/<%= book.id %>.html' target="_blank"><%= book.title %></a>
             (<% if book.close==1 %><font color="#49A9A9">完</font><% else %>载<% end %>) /<%= book.author %>
           </li>
       <% end %>

@@ -12,8 +12,8 @@
 
         <% @books_recommend.each do |book| %>
             <dl>
-              <dt><a href="/<%= book.id %>.html"><img src="http://www.qu.la/BookFiles/BookImages/<%= pinyin(book.title) %>.jpg" alt="<%= book.title %>" height="150" width="120"></a></dt>
-              <dd><a href="/<%= book.id %>.html"><%= book.title %></a></dd>
+              <dt><a href="/book/<%= book.id %>.html"><img src="http://www.qu.la/BookFiles/BookImages/<%= pinyin(book.title) %>.jpg" alt="<%= book.title %>" height="150" width="120"></a></dt>
+              <dd><a href="/book/<%= book.id %>.html"><%= book.title %></a></dd>
               <dd><%= book.category.title %></dd>
               <dd class="tit">作者：<%= book.author %></dd>
               <dd class="name"><%= book.description %></dd>
@@ -37,7 +37,7 @@
               <li>
                 <span class="hits"><%= book.author %></span>
                 <span class="genre">[<%= book.category.title %>]</span>
-                <a href="/<%= book.id %>.html" target="_blank"><%= book.title %></a>
+                <a href="/book/<%= book.id %>.html" target="_blank"><%= book.title %></a>
               </li>
           <% end %>
 
@@ -56,7 +56,7 @@
               <li>
                 <span class="hits"><%= catalog.book.author %></span>
                 <span class="genre">[<%= catalog.book.category.title %>]</span>
-                <a href="/<%= catalog.book.id %>.html" target="_blank"><%= catalog.book.title %></a>
+                <a href="/book/<%= catalog.book.id %>.html" target="_blank"><%= catalog.book.title %></a>
               </li>
           <% end %>
 
@@ -76,7 +76,7 @@
                   <li>
                     <span class="hits"><%= book.author %></span>
                     <span class="genre">[<%= book.category.title %>]</span>
-                    <a href="/<%= book.id %>.html" target="_blank"><%= book.title %></a>
+                    <a href="/book/<%= book.id %>.html" target="_blank"><%= book.title %></a>
                   </li>
               <% end %>
 
