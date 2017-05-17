@@ -65,6 +65,11 @@
     </div>
 
     <% @categories.each do |category| %>
+
+        <% if category.books.size < 10 %>
+            <% next %>
+        <% end %>
+
         <div class="index_toplist mright">
           <div class="toptab">
             <span><%= category.title %></span>
