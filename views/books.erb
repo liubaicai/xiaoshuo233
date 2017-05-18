@@ -7,7 +7,13 @@
 
       <% @books.each do |book| %>
           <li>
-            <a href='/book/<%= book.id %>.html' target="_blank"><%= book.title.split(@key).join("<font color='red'>#{@key}</font>") %></a>
+            <a href='/book/<%= book.id %>.html' target="_blank">
+              <% if book.title==@key %>
+                  <%= "<font color='red'>#{book.title}</font>" %>
+              <% else %>
+                  <%= book.title.split(@key).join("<font color='red'>#{@key}</font>") %>
+              <% end %>
+            </a>
             (<% if book.close==1 %><font color="#49A9A9">完</font><% else %>载<% end %>) /<%= book.author %>
           </li>
       <% end %>
