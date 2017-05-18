@@ -7,7 +7,7 @@
 
       <% @book.catalogs(:order => [ :catalog_id ]).each do |catalog| %>
           <li>
-            <a href='<%= catalog.src %>' target="_blank"><%= catalog.title %></a>
+            <a href='/book/<%= @book.id %>/<%= catalog.catalog_id %>.html' target="_blank"><%= catalog.title %></a>
           </li>
       <% end %>
 
