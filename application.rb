@@ -54,7 +54,7 @@ get '/search.html' do
     @books = Book.all(:close => 1)
   else
     @page_title = "search: `#{@key}`"
-    @books = Book.all(:title.like => "%#{@key}%") + Book.all(:author => @key)
+    @books = Book.all(:title.like => "%#{@key}%") + Book.all(:author.like => "%#{@key}%")
   end
   erb :books
 end
