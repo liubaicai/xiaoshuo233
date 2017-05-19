@@ -17,6 +17,7 @@ gem 'will_paginate'
 gem 'will_paginate-bootstrap'
 gem 'rufus-scheduler'
 gem 'chinese_pinyin'
+gem 'ya2yaml'
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin]
 

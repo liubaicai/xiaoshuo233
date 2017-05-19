@@ -20,6 +20,8 @@ helpers do
   end
 end
 
+
+
 # root page
 get '/' do
 
@@ -30,7 +32,7 @@ get '/' do
     IO.read(cache_file)
   else
 
-    @books_recommend = Book.all(:category.not => nil,:order => [ :views.desc ],:limit => 6)
+    @books_recommend = Book.all(:category.not => nil,:limit => 6,:title => Settings.get('book','recommend').split(','))
     @books_hot = Book.all(:category.not => nil,:order => [ :views.desc ],:limit => 10)
     @catalog_update = Catalog.all(:fields => [:book_id], :unique => true, :order => [:book_id.desc], :limit => 10)
     @categories = Category.all
@@ -121,3 +123,34 @@ get '/book/:book_id/:catalog_id.html' do
 
   end
 end
+
+
+
+# admin
+
+get '/admin/login.html' do
+  'hello login'
+end
+
+get '/admin*' do
+  if Settings.get('admin','pwd').nil? || session['user_token'] == Digest::MD5.hexdigest(Settings.get('admin','pwd'))
+    pass
+  else
+    redirect to('/admin/login.html')
+  end
+end
+
+get '/admin/manager.html' do
+  'hello manager'
+end
+
+
+
+
+
+
+
+
+
+
+

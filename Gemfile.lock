@@ -119,6 +119,7 @@ GEM
     will_paginate (3.1.5)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
+    ya2yaml (0.31)
 
 PLATFORMS
   ruby
@@ -147,6 +148,7 @@ DEPENDENCIES
   tzinfo-data
   will_paginate
   will_paginate-bootstrap
+  ya2yaml
 
 BUNDLED WITH
    1.14.6

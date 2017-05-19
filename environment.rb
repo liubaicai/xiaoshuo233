@@ -24,6 +24,8 @@ require 'will_paginate-bootstrap'
 require 'sinatra' unless defined?(Sinatra)
 
 require 'chinese_pinyin'
+require 'digest'
+require 'fileutils'
 
 require 'rufus-scheduler'
 
@@ -51,3 +53,32 @@ end
 
 $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/config")
 Dir.glob("#{File.dirname(__FILE__)}/config/*.rb") { |config| require File.basename(config, '.*') }
+
+$APP_CONFIG_FILE_PATH = 'config/app_config.yml'
+if !File.exist?($APP_CONFIG_FILE_PATH)
+  FileUtils.cp('config/app_config.demo.yml',$APP_CONFIG_FILE_PATH)
+end
+$APP_CONFIG = YAML.load_file($APP_CONFIG_FILE_PATH)
+
+class Settings
+  def self.get(mod,key)
+    $APP_CONFIG[mod][key]
+  end
+  def self.set(mod,key,value,autosave=true)
+    $APP_CONFIG[mod][key] = value
+    if autosave
+      save_config
+    end
+  end
+  def self.save_config
+    result = true
+    begin
+      File.open($APP_CONFIG_FILE_PATH, 'w') { |f|
+        f.puts $APP_CONFIG.ya2yaml
+      }
+    rescue => err
+      result = false
+    end
+    result
+  end
+end
