@@ -80,6 +80,13 @@ get '/books-all.json' do
   books.to_json
 end
 
+get '/books-category.html' do
+  @page_title = params[:t]
+  category = Category.first(:title => params[:t])
+  @books = Book.all(:category_id => category.id).paginate(:page => params[:page], :per_page => 100)
+  erb :books_all
+end
+
 get '/book/:book_id.html' do
   @book = Book.get(params['book_id'].to_i)
   @title = "#{@book.title}_#{@book.title}最新章节_#{@book.author.trim}_#{SiteConfig.site_name}"
