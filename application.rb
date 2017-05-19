@@ -32,7 +32,7 @@ get '/' do
     IO.read(cache_file)
   else
 
-    @books_recommend = Book.all(:category.not => nil,:limit => 6,:title => Settings.get('book','recommend').split(','))
+    @books_recommend = Book.all(:category.not => nil,:limit => 6,:title => ENV['recommend'].split(','))
     @books_hot = Book.all(:category.not => nil,:order => [ :views.desc ],:limit => 10)
     @catalog_update = Catalog.all(:fields => [:book_id], :unique => true, :order => [:book_id.desc], :limit => 10)
     @categories = Category.all
@@ -133,7 +133,7 @@ get '/admin/login.html' do
 end
 
 get '/admin*' do
-  if Settings.get('admin','pwd').nil? || session['user_token'] == Digest::MD5.hexdigest(Settings.get('admin','pwd'))
+  if ENV['admin_pwd'] || session['user_token'] == Digest::MD5.hexdigest(ENV['admin_pwd'])
     pass
   else
     redirect to('/admin/login.html')

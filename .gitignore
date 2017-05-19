@@ -53,3 +53,4 @@ build-iPhoneSimulator/
 /.idea/
 *.sqlite
 /config/app_config.yml
+.env
