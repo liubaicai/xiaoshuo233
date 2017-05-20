@@ -66,6 +66,7 @@ class Category
   has n, :books
 end
 
+#DataMapper.setup(:default, (ENV["DATABASE_URL"] || 'postgres://dbuser:123456@localhost/xiaoshuo'))
 DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{File.expand_path(File.dirname(__FILE__))}/dushu233.sqlite"))
 DataMapper.finalize
 DataMapper.auto_upgrade!
