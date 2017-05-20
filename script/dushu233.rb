@@ -36,7 +36,7 @@ class Book
   property :id,         Serial
   property :title,      String
   property :author,     String
-  property :description,String,     :default  => '',        :length => 500
+  property :description,Text,     :default  => '',        :length => 500
   property :category_id,Integer,    :index => :index_books_on_category_id
   property :close,      Integer,    :default  => 0
   property :views,      Integer,    :default  => 0
@@ -51,8 +51,8 @@ class Catalog
   property :id,         Serial
   property :book_id,    Integer,    :index => :index_books_on_catalogs_id
   property :catalog_id, Integer
-  property :title,      String
-  property :src,        String
+  property :title,      String,        :length => 254
+  property :src,        String,        :length => 254
 
   belongs_to :book
 end
