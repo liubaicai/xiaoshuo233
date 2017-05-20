@@ -26,8 +26,8 @@ pid_txt = File.open('dushu233.pid',"wb")
 pid_txt.puts Process.pid
 pid_txt.close
 
-# $logger = Logger.new('dushu233.log')
-$logger = Logger.new(STDOUT)
+$logger = Logger.new('dushu233.log')
+# $logger = Logger.new(STDOUT)
 $logger.datetime_format = '%Y-%m-%d %H:%M:%S'
 
 class Book
@@ -73,7 +73,6 @@ DataMapper.auto_upgrade!
 begin
 
   host = 'http://www.qu.la/book'
-  m_host = 'http://m.qu.la/book'
 
   $logger.info('Start Update......')
   error = 0
@@ -88,7 +87,6 @@ begin
       end
 
       url = "#{host}/#{index.to_s}/"
-      m_url = "#{m_host}/#{index.to_s}/"
       doc = Nokogiri::HTML(open(url), nil, 'UTF-8')
       title_node = doc.css('meta[property="og:title"]')
 
