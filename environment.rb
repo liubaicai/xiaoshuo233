@@ -28,6 +28,7 @@ require 'digest'
 require 'fileutils'
 
 require 'rufus-scheduler'
+require 'logger'
 
 Dotenv.load('.env')
 
