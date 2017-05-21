@@ -10,13 +10,12 @@ scheduler.cron '1 * * * * *' do
 
     logger.info('Start Update......')
     error = 0
-    (1..3).each do |index|
+    (1..50000).each do |index|
 
       j = 0
       begin
         book = Book.first(:id => index)
         if !book.nil? && book.close==1
-          logger.info("close:#{index}:#{book.title}")
           next
         end
 
@@ -48,8 +47,6 @@ scheduler.cron '1 * * * * *' do
           book.category_id = cate.id
           book.save
 
-          logger.info("downloading:#{index}:#{title}")
-
           nodes = doc.css('dd')
           book_id = book.id
 
@@ -60,7 +57,6 @@ scheduler.cron '1 * * * * *' do
             if status=='完成'
               book.close = 1
               book.save
-              logger.info("close:#{book.title}")
               next
             end
             next
@@ -96,7 +92,6 @@ scheduler.cron '1 * * * * *' do
           if status=='完成'
             book.close = 1
             book.save
-            logger.info("close:#{book.title}")
           end
         else
           error = error+1
