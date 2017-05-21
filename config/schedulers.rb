@@ -3,18 +3,19 @@
 scheduler = Rufus::Scheduler.new
 scheduler.cron '1 * * * * *' do
 
-  puts 'start'
   begin
 
     host = 'http://www.qu.la/book'
 
+    puts('Start Update......')
     error = 0
-    (1..2).each do |index|
+    (1..3).each do |index|
 
       j = 0
       begin
         book = Book.first(:id => index)
         if !book.nil? && book.close==1
+          puts("close:#{index}:#{book.title}")
           next
         end
 
@@ -46,6 +47,8 @@ scheduler.cron '1 * * * * *' do
           book.category_id = cate.id
           book.save
 
+          puts("downloading:#{index}:#{title}")
+
           nodes = doc.css('dd')
           book_id = book.id
 
@@ -56,6 +59,7 @@ scheduler.cron '1 * * * * *' do
             if status=='完成'
               book.close = 1
               book.save
+              puts("close:#{book.title}")
               next
             end
             next
@@ -83,6 +87,7 @@ scheduler.cron '1 * * * * *' do
               if i<10
                 retry
               end
+              $logger.error(e)
             end
 
           end
@@ -90,6 +95,7 @@ scheduler.cron '1 * * * * *' do
           if status=='完成'
             book.close = 1
             book.save
+            puts("close:#{book.title}")
           end
         else
           error = error+1
@@ -102,12 +108,13 @@ scheduler.cron '1 * * * * *' do
         if j<10
           retry
         end
+        $logger.error(e)
       end
 
     end
+    puts('Close Update.')
 
   end
-  puts 'end'
 
 end
 # scheduler.join
