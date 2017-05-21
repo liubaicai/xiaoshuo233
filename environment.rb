@@ -49,7 +49,7 @@ configure do
   DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{File.expand_path(File.dirname(__FILE__))}/dushu233.sqlite"))
   DataMapper.finalize
   DataMapper.auto_upgrade!
-end
 
-$LOAD_PATH.unshift("#{File.dirname(__FILE__)}/config")
-Dir.glob("#{File.dirname(__FILE__)}/config/*.rb") { |config| require File.basename(config, '.*') }
+  $LOAD_PATH.unshift("#{File.dirname(__FILE__)}/config")
+  Dir.glob("#{File.dirname(__FILE__)}/config/*.rb") { |config| require File.basename(config, '.*') }
+end
