@@ -26,7 +26,7 @@ pid_txt = File.open('dushu233.pid',"wb")
 pid_txt.puts Process.pid
 pid_txt.close
 
-$logger = Logger.new('dushu233.log')
+$logger = Logger.new("#{Time.now.to_s}.log")
 # $logger = Logger.new(STDOUT)
 $logger.datetime_format = '%Y-%m-%d %H:%M:%S'
 
