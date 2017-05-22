@@ -1,12 +1,12 @@
 #coding: utf-8
 
 scheduler = Rufus::Scheduler.new
-scheduler.cron '0 * * * * 1' do
+scheduler.cron '0 30 3 * * 1' do
 
   begin
 
     host = 'http://www.qu.la/book'
-    logger = Logger.new(STDOUT)
+    logger = Logger.new("#{File.dirname(__FILE__)}/../logs/#{Time.now.to_s}-scheduler.log")
 
     logger.info('Start Update......')
     error = 0
@@ -46,6 +46,8 @@ scheduler.cron '0 * * * * 1' do
           book.description = description
           book.category_id = cate.id
           book.save
+
+          logger.info("downloading:#{index}:#{title}")
 
           nodes = doc.css('dd')
           book_id = book.id
