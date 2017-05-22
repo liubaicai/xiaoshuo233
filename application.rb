@@ -38,7 +38,7 @@ get '/' do
       @books_recommend = Book.all(:category.not => nil,:limit => 6,:title => ENV['recommend'].split(','))
     end
     @books_hot = Book.all(:category.not => nil,:order => [ :views.desc ],:limit => 10)
-    @catalog_update = Catalog.all(:fields => [:book_id], :unique => true, :order => [:id.desc], :limit => 10)
+    @catalog_update = Catalog.all(:fields => [:book_id], :unique => true, :order => [:book_id.desc], :limit => 10)
     @categories = Category.all
 
     html = erb :index
