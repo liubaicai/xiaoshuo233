@@ -83,7 +83,7 @@ begin
     begin
       book = Book.first(:id => index)
       if !book.nil? && book.close==1
-        $logger.info("close:#{index}:#{book.title}")
+        # $logger.info("close:#{index}:#{book.title}")
         next
       end
 
@@ -127,7 +127,7 @@ begin
           if status=='完成'
             book.close = 1
             book.save
-            $logger.info("close:#{book.title}")
+            # $logger.info("close:#{book.title}")
             next
           end
           next
@@ -155,6 +155,7 @@ begin
             if i<10
               retry
             end
+            $logger.info("error:#{index}")
             $logger.error(e)
           end
 
@@ -163,7 +164,7 @@ begin
         if status=='完成'
           book.close = 1
           book.save
-          $logger.info("close:#{book.title}")
+          # $logger.info("close:#{book.title}")
         end
       else
         error = error+1
@@ -176,6 +177,7 @@ begin
       if j<10
         retry
       end
+      $logger.info("error:#{index}")
       $logger.error(e)
     end
 

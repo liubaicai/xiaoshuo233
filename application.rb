@@ -29,7 +29,7 @@ get '/' do
   cache_dir = "#{File.dirname(__FILE__)}/tmp/cache_html"
 
   if File.exist?(cache_file) && (File.mtime(cache_file) >= (Time.now - 3600))
-    IO.read(cache_file)
+      IO.read(cache_file)
   else
 
     if ENV['recommend'].nil?
@@ -38,7 +38,7 @@ get '/' do
       @books_recommend = Book.all(:category.not => nil,:limit => 6,:title => ENV['recommend'].split(','))
     end
     @books_hot = Book.all(:category.not => nil,:order => [ :views.desc ],:limit => 10)
-    @catalog_update = Catalog.all(:fields => [:book_id], :unique => true, :order => [:book_id.desc], :limit => 10)
+    @catalog_update = Catalog.all(:fields => [:book_id], :unique => true, :order => [:id.desc], :limit => 10)
     @categories = Category.all
 
     html = erb :index
