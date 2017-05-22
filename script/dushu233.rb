@@ -115,7 +115,7 @@ begin
         book.category_id = cate.id
         book.save
 
-        $logger.info("downloading:#{index}:#{title}")
+        # $logger.info("downloading:#{index}:#{title}")
 
         nodes = doc.css('dd')
         book_id = book.id
