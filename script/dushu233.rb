@@ -8,25 +8,25 @@ require 'data_mapper'
 require 'logger'
 
 if ARGV.first.to_s == 'exit'
-  if File.exist?('dushu233.pid')
-    pid = `cat dushu233.pid`
+  if File.exist?("#{File.dirname(__FILE__)}/dushu233.pid")
+    pid = `cat #{File.dirname(__FILE__)}/dushu233.pid`
     `kill -9 #{pid} `
-    File.delete('dushu233.pid')
+    File.delete("#{File.dirname(__FILE__)}/dushu233.pid")
   end
   Process.exit
 end
 
-if File.exist?('dushu233.pid')
-  pid = IO.read('dushu233.pid').delete("\n")
+if File.exist?("#{File.dirname(__FILE__)}/dushu233.pid")
+  pid = IO.read("#{File.dirname(__FILE__)}/dushu233.pid").delete("\n")
   puts("Process #{pid} is Running! Please run: \"ruby dushu233.rb exit\"")
   Process.exit
 end
 
-pid_txt = File.open('dushu233.pid',"wb")
+pid_txt = File.open("#{File.dirname(__FILE__)}/dushu233.pid","wb")
 pid_txt.puts Process.pid
 pid_txt.close
 
-$logger = Logger.new("#{Time.now.to_s}.log")
+$logger = Logger.new("#{File.dirname(__FILE__)}/#{Time.now.strftime('%Y-%m-%d')}.log")
 # $logger = Logger.new(STDOUT)
 $logger.datetime_format = '%Y-%m-%d %H:%M:%S'
 
@@ -184,8 +184,8 @@ begin
   end
   $logger.info('Close Update.')
 
-  if File.exist?('dushu233.pid')
-    File.delete('dushu233.pid')
+  if File.exist?("#{File.dirname(__FILE__)}/dushu233.pid")
+    File.delete("#{File.dirname(__FILE__)}/dushu233.pid")
   end
 
 end
