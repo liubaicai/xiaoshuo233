@@ -1,13 +1,15 @@
 #coding: utf-8
 
 scheduler = Rufus::Scheduler.singleton
-scheduler.cron '0 55 * * * *' do
+scheduler.cron '0 0 0 * * 1' do
 
   begin
 
-    unless File.exist?("#{File.dirname(__FILE__)}/../script/dushu233.pid")
-      `ruby #{File.dirname(__FILE__)}/../script/dushu233.rb`
+    if File.exist?("#{File.dirname(__FILE__)}/../script/dushu233.pid")
+      `ruby #{File.dirname(__FILE__)}/../script/dushu233.rb exit`
+      sleep(1)
     end
+    `ruby #{File.dirname(__FILE__)}/../script/dushu233.rb`
 
   end
 
