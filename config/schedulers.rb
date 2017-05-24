@@ -1,7 +1,7 @@
 #coding: utf-8
 
 scheduler = Rufus::Scheduler.singleton
-scheduler.cron '0 0 0 * * 1' do
+scheduler.cron '0 0 0 * * 1,4' do
 
   begin
 
