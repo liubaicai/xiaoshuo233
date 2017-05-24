@@ -26,8 +26,6 @@ require 'sinatra' unless defined?(Sinatra)
 require 'chinese_pinyin'
 require 'digest'
 require 'fileutils'
-
-require 'rufus-scheduler'
 require 'logger'
 
 Dotenv.load('.env')
