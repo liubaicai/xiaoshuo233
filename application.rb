@@ -39,11 +39,11 @@ get '/' do
     end
     @books_hot = Book.all(:category.not => nil,:order => [ :views.desc ],:limit => 10)
     @books_new = repository(:default).adapter.select(
-'select a.*,b.book_id,catalog_id,c.title as category_title from books a inner join
-(select book_id,max(catalog_id) as catalog_id
+'select a.*,b.book_id,b.id as catalog_id,c.title as category_title from books a inner join
+(select book_id,max(id) as id
 from catalogs
 group by book_id
-order by catalog_id desc
+order by id desc
 limit 10) b on a.id = b.book_id
 inner join categories c on a.category_id = c.id
 order by catalog_id desc')
