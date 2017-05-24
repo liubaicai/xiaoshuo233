@@ -27,6 +27,7 @@ require 'chinese_pinyin'
 require 'digest'
 require 'fileutils'
 require 'logger'
+require 'rufus-scheduler'
 
 Dotenv.load('.env')
 
