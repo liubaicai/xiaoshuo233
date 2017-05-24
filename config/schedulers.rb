@@ -1,7 +1,7 @@
 #coding: utf-8
 
 scheduler = Rufus::Scheduler.singleton
-scheduler.every '1m' do
+scheduler.cron '0 55 * * * *' do
 
   begin
 
@@ -12,3 +12,9 @@ scheduler.every '1m' do
   end
 
 end
+
+# nginx.conf：
+#
+# passenger_spawn_method direct;
+# passenger_min_instances 1;
+# passenger_pool_idle_time 0;
