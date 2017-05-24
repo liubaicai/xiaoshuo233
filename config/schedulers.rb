@@ -1,7 +1,7 @@
 #coding: utf-8
 
-scheduler = Rufus::Scheduler.new
-scheduler.every '1m' do
+scheduler = Rufus::Scheduler.singleton
+scheduler.every '10m' do
 
   begin
 
