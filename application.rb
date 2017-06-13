@@ -144,6 +144,16 @@ get '/book/:book_id/:catalog_id.html' do
   end
 end
 
+get '/book-images/:image_name' do
+  cache_file = "#{File.dirname(__FILE__)}/tmp/cache_image/#{params['image_name']}"
+  if File.exist?(cache_file)
+    send_file cache_file, :type => :jpg, :disposition => :inline
+  else
+    downLoad(cache_file,"http://www.qu.la/BookFiles/BookImages/#{params['image_name']}")
+    send_file cache_file, :type => :jpg, :disposition => :inline
+  end
+end
+
 
 
 # admin
