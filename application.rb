@@ -146,6 +146,10 @@ end
 
 get '/book-images/:image_name' do
   cache_file = "#{File.dirname(__FILE__)}/tmp/cache_image/#{params['image_name']}"
+  cache_dir = "#{File.dirname(__FILE__)}/tmp/cache_image"
+  if !Dir.exist?(cache_dir)
+    Dir.mkdir(cache_dir)
+  end
   if File.exist?(cache_file)
     send_file cache_file, :type => :jpg, :disposition => :inline
   else
