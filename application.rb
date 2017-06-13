@@ -74,14 +74,14 @@ get '/search.html' do
   erb :books
 end
 
-get '/books.html' do
-  @books = Book.all.paginate(:page => params[:page], :per_page => 100)
-  erb :books
-end
+# get '/books.html' do
+#   @books = Book.all.paginate(:page => params[:page], :per_page => 100)
+#   erb :books
+# end
 
 get '/books-all.html' do
   @page_title = '全部小说'
-  @books = Book.paginate(:page => params[:page], :per_page => 100)
+  @books = Book.paginate(:order => [ :views.desc ], :page => params[:page], :per_page => 100)
   erb :books_all
 end
 get '/books-all.json' do
