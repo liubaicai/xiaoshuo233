@@ -56,3 +56,4 @@ build-iPhoneSimulator/
 *.pid
 /config/app_config.yml
 .env
+node_modules/*
