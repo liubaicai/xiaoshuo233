@@ -1,46 +1,112 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>小说有读_清爽无弹窗广告的网络小说阅读网</title>
-  <meta name="keywords" content="小说有读,无弹窗,笔趣阁,小说"/>
-  <meta name="description" content="小说有读是广大书友最值得收藏的网络小说阅读网，网站收录了当前最火热的网络小说，免费提供高质量的小说最新章节，是广大网络小说爱好者必备的小说阅读网。"/>
-  <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/stylesheets/main.css" rel="stylesheet" type="text/css"/>
-  <link href="/stylesheets/bqg.css" rel="stylesheet" type="text/css"/>
+    <title>小说有读_清爽无弹窗广告的网络小说阅读网</title>
+    <meta name="keywords" content="小说有读,无弹窗,笔趣阁,小说"/>
+    <meta name="description" content="小说有读是广大书友最值得收藏的网络小说阅读网，网站收录了当前最火热的网络小说，免费提供高质量的小说最新章节，是广大网络小说爱好者必备的小说阅读网。"/>
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/stylesheets/main.css" rel="stylesheet" type="text/css"/>
+    <link href="/stylesheets/bqg.css" rel="stylesheet" type="text/css"/>
 
-  <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-  <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="/favicon.ico" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/favicon.ico" />
 </head>
 <body>
 <div class="container-fluid">
-  <div class="header">
-    <div id="row" style="text-align:left;">
-      <div class="col-sm-4">
-        <a href="/">
-          <div class="s_lg_img text-left" style="background:url(/images/logo.png);width:200px;height:60px;">
-          </div>
-        </a>
-      </div>
-      <div class="col-sm-8">
-        <form class="s-form" class="text-right" action="/search.html" method="get">
-          <input type="text" name="key" placeholder="请输入您要搜索的关键字" class="s_ipt" maxlength="100" value="">
-          <input type="submit" value="摆渡一下" class="s_btn">
-        </form>
-      </div>
+    <div class="header">
+        <div id="row" style="text-align:left;">
+            <div class="col-sm-4">
+                <a href="/">
+                    <div class="s_lg_img text-left" style="background:url(/images/logo.png);width:200px;height:60px;">
+                    </div>
+                </a>
+            </div>
+            <div class="col-sm-8">
+                <form class="s-form" class="text-right" action="/search.html" method="get">
+                    <input type="text" name="key" placeholder="请输入您要搜索的关键字" class="s_ipt" maxlength="100" value="">
+                    <input type="submit" value="摆渡一下" class="s_btn">
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
-  <div class="content">
-      <%= title %>
-  </div>
-  <div class="footer">
-    <p class="legal">小说有读 致力为您打造最优越的网络小说阅读环境。</p>
-    <p class="legal">小说有读 所有书籍搜索采集于互联网，是本站全自动蜘蛛爬行，无人工干预，如果侵犯了您的权益请及时联系我们。</p>
-    <p class="legal">&mdash; &copy; 2017 powered by liubaicai &mdash;</p>
-  </div>
+    <div class="content">
+        <div class="row">
+
+            <div id="main" style="text-align:left;">
+
+                <div class="coverecom mbottom">
+                    <div class="tabstit">
+                        <span class="label"></span><em>本周强推</em>
+                        <em style="float: right;text-align:right; font-size: 12px;margin-right: 10px;font-weight:normal;"><a href="/books-all.html">查看所有小说</a></em>
+                    </div>
+                    <div class="row recombook" style="float:left;margin-right:0;margin-left:0;padding-left:5px;padding-bottom:5px;">
+
+                        <% books_recommend.forEach(function(book){ %>
+                        <dl>
+                            <dt><a href="/book/<%= book.id %>.html"><img src="/book-images/<%= book.title %>.jpg" alt="<%= book.title %>" height="150" width="120"></a></dt>
+                            <dd><a href="/book/<%= book.id %>.html"><%= book.title %></a></dd>
+                            <dd><%= book.category.title %></dd>
+                            <dd class="tit">作者：<%= book.author %></dd>
+                            <dd class="name"><%= book.description %></dd>
+                        </dl>
+                        <% }) %>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="row index_last" style="text-align:left;">
+
+                <div class="index_toplist mright">
+                    <div class="toptab">
+                        <span>点击排行</span>
+                    </div>
+                    <div class="index_top">
+                        <ul>
+
+                            <% books_hot.forEach(function(book){ %>
+                            <li>
+                                <span class="hits"><%= book.author %></span>
+                                <span class="genre">[<a target="_blank" href="/books-category.html?t=<%= book.category.title %>"><%= book.category.title %></a>]</span>
+                                <a href="/book/<%= book.id %>.html" target="_blank"><%= book.title %></a>
+                            </li>
+                            <% }) %>
+
+                        </ul>
+                    </div>
+                </div>
+
+                <% categories.forEach(function(category){ %>
+
+                <div class="index_toplist mright">
+                    <div class="toptab">
+                        <span><%= category.title %></span>
+                    </div>
+                    <div class="index_top">
+                        <ul>
+                            <% category.books.forEach(function(book){ %>
+                            <li>
+                                <span class="hits"><%= book.author %></span>
+                                <span class="genre">[<a target="_blank" href="/books-category.html?t=<%= category.title %>"><%= category.title %></a>]</span>
+                                <a href="/book/<%= book.id %>.html" target="_blank"><%= book.title %></a>
+                            </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <p class="legal">小说有读 致力为您打造最优越的网络小说阅读环境。</p>
+        <p class="legal">小说有读 所有书籍搜索采集于互联网，是本站全自动蜘蛛爬行，无人工干预，如果侵犯了您的权益请及时联系我们。</p>
+        <p class="legal">&mdash; &copy; 2017 powered by liubaicai &mdash;</p>
+    </div>
 </div>
 </body>
 </html>
