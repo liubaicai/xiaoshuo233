@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var models = require('../models/models');
+var pinyin = require('pinyin');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -26,9 +27,10 @@ router.get('/', function(req, res, next) {
     var cates = models.category.findAll({
         include: [{
             model: models.book,
-            order: [ [ 'views', 'DESC' ] ],
-            limit: 10
-        }]}).then(function (categories) {
+            limit: 10,
+            order: [[ 'views', 'DESC' ]],
+        }],
+    }).then(function (categories) {
         config.categories = categories
     });
     promises.push(recommend);
@@ -38,6 +40,7 @@ router.get('/', function(req, res, next) {
         .then(function(results){
             console.log(results)
             res.render('index', {
+                pinyin: pinyin,
                 books_recommend: config.books_recommend,
                 books_hot: config.books_hot,
                 categories: config.categories,
