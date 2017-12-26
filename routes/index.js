@@ -48,4 +48,12 @@ router.get('/', function(req, res, next) {
         });
 });
 
+router.get('/books-all.html', function(req, res, next) {
+    models.book.findAll().then(function (books) {
+        res.render('all', {
+            books: books
+        });
+    });
+});
+
 module.exports = router;

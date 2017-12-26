@@ -47,7 +47,7 @@
 
                         <% books_recommend.forEach(function(book){ %>
                         <dl>
-                            <dt><a href="/book/<%= book.id %>.html"><img src="/book-images/<%= (pinyin(book.title, {style: pinyin.STYLE_NORMAL})).toString().replace(/,/g, '') %>.jpg" alt="<%= book.title %>" height="150" width="120"></a></dt>
+                            <dt><a href="/book/<%= book.id %>.html"><img src="http://www.qu.la/BookFiles/BookImages/<%= (pinyin(book.title, {style: pinyin.STYLE_NORMAL})).toString().replace(/,/g, '') %>.jpg" alt="<%= book.title %>" height="150" width="120"></a></dt>
                             <dd><a href="/book/<%= book.id %>.html"><%= book.title %></a></dd>
                             <dd><%= book.category.title %></dd>
                             <dd class="tit">作者：<%= book.author %></dd>

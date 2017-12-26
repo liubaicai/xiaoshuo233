@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= book.title %>_小说有读_清爽无弹窗广告的网络小说阅读网</title>
+    <title>小说有读_清爽无弹窗广告的网络小说阅读网</title>
     <meta name="keywords" content="小说有读,无弹窗,笔趣阁,小说"/>
     <meta name="description" content="小说有读是广大书友最值得收藏的网络小说阅读网，网站收录了当前最火热的网络小说，免费提供高质量的小说最新章节，是广大网络小说爱好者必备的小说阅读网。"/>
     <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -37,12 +37,13 @@
         <div class="row">
 
             <div class="listlie" style="text-align:left;">
-                <h2><%= book.title %></h2>
+                <h2>Books</h2>
                 <ul>
 
-                    <% book.catalogs.forEach(function(catalog){ %>
+                    <% books.forEach(function(book){ %>
                     <li>
-                        <a href='/book/<%= book.id %>/<%= catalog.catalog_id %>.html' target="_blank"><%= catalog.title %></a>
+                        <a href='/book/<%= book.id %>.html' target="_blank"><%= book.title %></a>
+                        (<% if(book.close==1){ %><font color="#49A9A9">完</font><% }else{ %>载<% } %>) /<%= book.author %>
                     </li>
                     <% }) %>
 
