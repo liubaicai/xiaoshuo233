@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models/models');
 var pinyin = require('pinyin');
+var pagination = require('pagination');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -49,9 +50,50 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/books-all.html', function(req, res, next) {
-    models.book.findAll().then(function (books) {
+    var pagesize = 100;
+    var page = req.query.page;
+    if (page){}else{
+        page = 1
+    }
+    models.book.findAndCountAll({
+        order: [ [ 'views', 'DESC' ] ],
+        limit: pagesize,
+        offset: (page - 1) * pagesize
+    }).then(function (books) {
+        var paginator = new pagination.TemplatePaginator({
+            current: page,
+            rowsPerPage: pagesize,
+            totalResult: books.count,
+            template: function(result) {
+                var i, len, prelink;
+                var html = '<div><ul class="pagination">';
+                if(result.pageCount < 2) {
+                    html += '</ul></div>';
+                    return html;
+                }
+                prelink = this.preparePreLink(result.prelink);
+                if(result.previous) {
+                    html += '<li><a href="' + prelink + result.previous + '">' + '上一页' + '</a></li>';
+                }
+                if(result.range.length) {
+                    for( i = 0, len = result.range.length; i < len; i++) {
+                        if(result.range[i] === result.current) {
+                            html += '<li class="active"><a href="' + prelink + result.range[i] + '">' + result.range[i] + '</a></li>';
+                        } else {
+                            html += '<li><a href="' + prelink + result.range[i] + '">' + result.range[i] + '</a></li>';
+                        }
+                    }
+                }
+                if(result.next) {
+                    html += '<li><a href="' + prelink + result.next + '" class="paginator-next">' + '下一页' + '</a></li>';
+                }
+                html += '</ul></div>';
+                return html;
+            }
+        });
         res.render('all', {
-            books: books
+            books: books.rows,
+            paginator: paginator
         });
     });
 });
