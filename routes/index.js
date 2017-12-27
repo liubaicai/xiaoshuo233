@@ -91,7 +91,7 @@ router.get('/books-all.html', function(req, res, next) {
                 return html;
             }
         });
-        res.render('all', {
+        res.render('books', {
             title: '所有小说',
             books: books.rows,
             paginator: paginator
@@ -147,7 +147,7 @@ router.get('/books-category.html', function(req, res, next) {
                     return html;
                 }
             });
-            res.render('all', {
+            res.render('books', {
                 title: '所有小说',
                 books: books.rows,
                 paginator: paginator
