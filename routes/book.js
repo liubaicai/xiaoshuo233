@@ -5,6 +5,11 @@ var request = require('request');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op
 
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM(`<!DOCTYPE html>`);
+const $ = require('jQuery')(window);
+
 router.get('/:id.html', function(req, res, next) {
     models.book.findById(req.params.id, {
         include: [{
@@ -52,9 +57,17 @@ router.get('/:id/:cid.html', function(req, res, next) {
         Promise.all([max,min])
             .then(function(results){
                 request(catalog.src, function (error, response, body) {
+                    var node = $(escape2Html(body)).find("div#content");
+                    var content = node.html().replace(/<br>　　<br>/g, '<br>');
+                    if(content.indexOf("本站重要通知") > 0){
+                        content = content.substring(0, content.indexOf('本站重要通知'));
+                    }
+                    if(content.indexOf("请关注微信") > 0){
+                        content = content.substring(0, content.indexOf('请关注微信'));
+                    }
                     res.render('detail', {
                         catalog: catalog,
-                        content: body,
+                        content: content,
                         prev_catalog: prev_catalog,
                         next_catalog: next_catalog,
                     });
@@ -62,5 +75,10 @@ router.get('/:id/:cid.html', function(req, res, next) {
             });
     });
 });
+
+function escape2Html(str) {
+    var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
+    return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];});
+}
 
 module.exports = router;

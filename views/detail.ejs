@@ -35,20 +35,14 @@
     </div>
     <div class="content">
         <div id="center" style="background: #fff;border: 1px solid #F1F1F1;">
-            <div class="title">
-                <h1><%= catalog.title %></h1>
-                作者：
-                <span><%= catalog.book.author %></span>
-                分类：
-                <span>
-      <%= catalog.book.category.title %>
-    </span>
-                字体：
-                <span>
-      <a class="largeFont">大</a>
-      <a class="medFont">中</a>
-      <a class="smallFont">小</a>
-    </span>
+            <div class="title"><h1><%= catalog.title %></h1>
+                作者:<span><%= catalog.book.author %></span>
+                分类:<span><%= catalog.book.category.title %>
+                </span>字体:<span>
+                    <a class="largeFont">大</a>
+                    <a class="medFont">中</a>
+                    <a class="smallFont">小</a>
+                </span>
             </div>
             <div id="content" class="fontsizebox" style="font-size: 20px;">
                 <%- content %>
