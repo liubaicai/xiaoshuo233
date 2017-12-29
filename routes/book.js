@@ -19,6 +19,8 @@ router.get('/:id.html', function(req, res, next) {
             [ { model: models.catalog }, 'catalog_id' ]
         ],
     }).then(function (book) {
+        book.views = book.views+1;
+        book.save();
         res.render('book', {
             book: book,
         });
@@ -28,6 +30,7 @@ router.get('/:id.html', function(req, res, next) {
 router.get('/:id/:cid.html', function(req, res, next) {
     models.catalog.findOne({
         where: {
+            'book_id': req.params.id,
             'catalog_id': req.params.cid,
         },
         include: [{
@@ -38,6 +41,8 @@ router.get('/:id/:cid.html', function(req, res, next) {
             [ 'catalog_id' ]
         ],
     }).then(function (catalog) {
+        catalog.book.views = catalog.book.views+1;
+        catalog.book.save();
         var prev_catalog;
         var next_catalog;
         var max = models.catalog.max('catalog_id',{ where: {
@@ -65,6 +70,7 @@ router.get('/:id/:cid.html', function(req, res, next) {
                     if(content.indexOf("请关注微信") > 0){
                         content = content.substring(0, content.indexOf('请关注微信'));
                     }
+
                     res.render('detail', {
                         catalog: catalog,
                         content: content,

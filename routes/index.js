@@ -3,6 +3,9 @@ var router = express.Router();
 var models = require('../models/models');
 var pinyin = require('pinyin');
 var pagination = require('pagination');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op
+const operatorsAliases = {}
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -34,6 +37,7 @@ router.get('/', function(req, res, next) {
     }).then(function (categories) {
         config.categories = categories
     });
+
     promises.push(recommend);
     promises.push(hot);
     promises.push(cates);
@@ -47,6 +51,15 @@ router.get('/', function(req, res, next) {
                 categories: config.categories,
             });
         });
+});
+
+router.get('/update.json', function (req, res) {
+    var sql = 'SELECT A.*,b.book_id,b.ID AS catalog_id,C.title AS category_title FROM books A INNER JOIN (SELECT book_id,MAX (ID) AS ID FROM catalogs GROUP BY book_id ORDER BY ID DESC LIMIT 10) b ON A.ID=b.book_id INNER JOIN categories C ON A.category_id=C.ID ORDER BY catalog_id DESC';
+    const seq = new Sequelize('postgres://dbbook:123456@127.0.0.1:5432/xiaoshuo', { operatorsAliases });
+    seq.query(sql, { type: seq.QueryTypes.SELECT})
+        .then(books => {
+            res.json(books);
+        })
 });
 
 router.get('/books-all.html', function(req, res, next) {
@@ -159,9 +172,22 @@ router.get('/books-category.html', function(req, res, next) {
 router.get('/search.html', function(req, res, next) {
     var key = req.query.key;
     if (key){
-
+        models.book.findAndCountAll({
+            where: {
+                title: {
+                    [Op.like]: "%"+key+"%"
+                }
+            },
+            order: [ [ 'views', 'DESC' ] ],
+        }).then(function (books) {
+            res.render('books', {
+                title: '所有小说',
+                books: books.rows,
+                paginator: null
+            });
+        });
     }else {
-
+        res.redirect('/books-all.html');
     }
 });
 
