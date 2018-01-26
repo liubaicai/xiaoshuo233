@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const operatorsAliases = {}
-const seq = new Sequelize('postgres://dbbook:123456@127.0.0.1:5432/xiaoshuo', { operatorsAliases });
+// const seq = new Sequelize('postgres://dbbook:123456@127.0.0.1:5432/xiaoshuo', { operatorsAliases });
+const seq = new Sequelize('sqlite://db/db.sqlite', { operatorsAliases });
 
 const category = seq.define('categories', {
     id: {
@@ -78,4 +79,12 @@ book.hasMany(catalog, {foreignKey: 'book_id'});
 catalog.belongsTo(book, {foreignKey: 'book_id'});
 book.belongsTo(category, {foreignKey: 'category_id'});
 
-module.exports = {category:category, book:book, catalog:catalog};
+// category.sync();
+// book.sync();
+// catalog.sync();
+
+module.exports = {};
+module.exports.category = category
+module.exports.book = book
+module.exports.catalog = catalog
+module.exports.seq = seq

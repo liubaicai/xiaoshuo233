@@ -2,8 +2,7 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models/models');
 var request = require('request');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op
+const Op = require('sequelize').Op
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
