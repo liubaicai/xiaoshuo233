@@ -3,9 +3,6 @@ var router = express.Router();
 var models = require('../models/models');
 var pinyin = require('pinyin');
 var pagination = require('pagination');
-const Op = require('sequelize').Op;
-const operatorsAliases = {}
-const Seq = models.seq;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -55,7 +52,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/update.json', function (req, res) {
     var sql = 'SELECT A.*,b.book_id,b.ID AS catalog_id,C.title AS category_title FROM books A INNER JOIN (SELECT book_id,MAX (ID) AS ID FROM catalogs GROUP BY book_id ORDER BY ID DESC LIMIT 10) b ON A.ID=b.book_id INNER JOIN categories C ON A.category_id=C.ID ORDER BY catalog_id DESC';
-    Seq.query(sql, { type: Seq.QueryTypes.SELECT})
+    models.seq.query(sql, { type: models.seq.QueryTypes.SELECT})
         .then(books => {
             res.json(books);
         })
@@ -174,7 +171,7 @@ router.get('/search.html', function(req, res, next) {
         models.book.findAndCountAll({
             where: {
                 title: {
-                    [Op.like]: "%"+key+"%"
+                    [models.op.like]: "%"+key+"%"
                 }
             },
             order: [ [ 'views', 'DESC' ] ],

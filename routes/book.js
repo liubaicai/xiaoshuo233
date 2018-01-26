@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models/models');
 var request = require('request');
-const Op = require('sequelize').Op
 
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
@@ -45,15 +44,15 @@ router.get('/:id/:cid.html', function(req, res, next) {
         var prev_catalog;
         var next_catalog;
         var max = models.catalog.max('catalog_id',{ where: {
-                book_id: { [Op.eq]: catalog.book_id },
-                catalog_id: { [Op.lt]: catalog.catalog_id }
+                book_id: { [models.op.eq]: catalog.book_id },
+                catalog_id: { [models.op.lt]: catalog.catalog_id }
             }
         }).then(max => {
             prev_catalog = max;
         })
         var min = models.catalog.min('catalog_id', { where: {
-                book_id: { [Op.eq]: catalog.book_id },
-                catalog_id: { [Op.gt]: catalog.catalog_id }
+                book_id: { [models.op.eq]: catalog.book_id },
+                catalog_id: { [models.op.gt]: catalog.catalog_id }
             }
         }).then(min => {
             next_catalog = min;

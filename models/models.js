@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const Op = require('sequelize').Op
 const operatorsAliases = {}
 // const seq = new Sequelize('postgres://dbbook:123456@127.0.0.1:5432/xiaoshuo', { operatorsAliases });
 const seq = new Sequelize('sqlite://db/db.sqlite', { operatorsAliases });
@@ -88,3 +89,4 @@ module.exports.category = category
 module.exports.book = book
 module.exports.catalog = catalog
 module.exports.seq = seq
+module.exports.op = Op
