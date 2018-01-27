@@ -7,6 +7,7 @@ const seq = new Sequelize('sqlite://db/db.sqlite', { operatorsAliases });
 const category = seq.define('categories', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     title: {
@@ -19,6 +20,7 @@ const category = seq.define('categories', {
 const book = seq.define('books', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     title: {
@@ -36,7 +38,6 @@ const book = seq.define('books', {
     category_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true
     },
     close: {
         type: Sequelize.INTEGER,
@@ -52,12 +53,12 @@ const book = seq.define('books', {
 const catalog = seq.define('catalogs', {
     id: {
         type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true
     },
     book_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        primaryKey: true
     },
     catalog_id: {
         type: Sequelize.INTEGER,
@@ -80,9 +81,9 @@ book.hasMany(catalog, {foreignKey: 'book_id'});
 catalog.belongsTo(book, {foreignKey: 'book_id'});
 book.belongsTo(category, {foreignKey: 'category_id'});
 
-// category.sync();
-// book.sync();
-// catalog.sync();
+category.sync();
+book.sync();
+catalog.sync();
 
 module.exports = {};
 module.exports.category = category

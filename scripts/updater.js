@@ -1,38 +1,56 @@
 
 const schedule = require('node-schedule');
 
-const request = require('request');
-const cheerio = require('cheerio')
+const request = require('request-promise');
+const cheerio = require('cheerio');
+const models = require('../models/models');
 
-const start = function () {
-    // '0 0 1 * * 2' 每周一凌晨一点
-    schedule.scheduleJob('0 * * * * *', function(){
-        request('https://www.qu.la/book/1', function (error, response, body) {
-            if(response && response.statusCode==200){
-                const $ = cheerio.load(escape2Html(body), {decodeEntities: false})
+const start = async function () {
+    for (var i = 1;i <= 50000;i++){
+        try
+        {
+            var response = await request({
+                method: 'GET',
+                uri: `https://www.qu.la/book/${i}`,
+                resolveWithFullResponse: true});
+            if (response && response.statusCode==200){
+                const $ = cheerio.load(escape2Html(response.body), {decodeEntities: false});
                 var title = $('meta[property="og:title"]').prop('content');
                 var description = $('meta[property="og:description"]').prop('content');
-                var category = $('meta[property="og:novel:category"]').prop('content');
+                var categoryTitle = $('meta[property="og:novel:category"]').prop('content');
                 var author = $('meta[property="og:novel:author"]').prop('content');
                 var status = $('meta[property="og:novel:status"]').prop('content'); // 连载,完成
-                console.log(title);
-                console.log(description);
-                console.log(category);
-                console.log(author);
-                console.log(status);
+                if(status=="完成"){
+                    var category = await models.category.findOne({
+                        where: {
+                            title: categoryTitle
+                        }
+                    });
+                    if (category==null){
+                        category = await models.category.create({ title: categoryTitle})
+                    }
+                }
             }
-            // var node = $(escape2Html(body)).find("div#content");
+        }
+        catch(err)
+        {
+            console.log(err);
+        }
+    }
+}
 
-            // console.log('error:', error); // Print the error if one occurred
-            // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-            // console.log('body:', body); // Print the HTML for the Google homepage.
-        });
+const scheduleJob = function () {
+    // '0 0 1 * * 2' 每周一凌晨一点
+    schedule.scheduleJob('0 * * * * *', async () => {
+
     });
 }
+
 
 function escape2Html(str) {
     var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
     return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){return arrEntities[t];});
 }
 
+module.exports.scheduleJob = scheduleJob;
 module.exports.start = start;
