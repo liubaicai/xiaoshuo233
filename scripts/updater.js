@@ -6,7 +6,7 @@ const cheerio = require('cheerio');
 const models = require('../models/models');
 
 const start = async function () {
-    for (var i = 1;i <= 50000;i++){
+    for (var i = 1;i <= 1;i++){
         try
         {
             var response = await request({
@@ -29,7 +29,26 @@ const start = async function () {
                     if (category==null){
                         category = await models.category.create({ title: categoryTitle})
                     }
+                    var alist = new Array();
+                    $('dl dd a').each(function(i, elem) {
+                        var at = $(this).text();
+                        var al = $(this).prop('href');
+                        alist.push([at,al])
+                    });
+                    var ar = await request({
+                        method: 'GET',
+                        uri: `https://www.qu.la${alist[0][1]}`,
+                        resolveWithFullResponse: true});
+                    if (ar && ar.statusCode==200){
+                        var a$ = cheerio.load(escape2Html(ar.body), {decodeEntities: false});
+                        a$('div#content script').remove();
+                        var content = a$('div#content').html();
+                        console.log(content);
+                    }
+                    return false;
                 }
+            }else {
+                console.log(response);
             }
         }
         catch(err)
