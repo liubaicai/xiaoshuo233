@@ -43,7 +43,7 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
-var updater = require('./scripts/updater');
-updater.start();
+// var updater = require('./scripts/updater');
+// updater.start();
 
 module.exports = app;

@@ -2,11 +2,7 @@ var express = require('express');
 var router = express.Router();
 var models = require('../models/models');
 var request = require('request');
-
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
-const { window } = new JSDOM(`<!DOCTYPE html>`);
-const $ = require('jQuery')(window);
+const cheerio = require('cheerio');
 
 router.get('/:id.html', function(req, res, next) {
     models.book.findById(req.params.id, {
@@ -60,7 +56,8 @@ router.get('/:id/:cid.html', function(req, res, next) {
         Promise.all([max,min])
             .then(function(results){
                 request(catalog.src, function (error, response, body) {
-                    var node = $(escape2Html(body)).find("div#content");
+                    const $ = cheerio.load(escape2Html(body), {decodeEntities: false});
+                    var node = $("div#content");
                     var content = node.html().replace(/<br>　　<br>/g, '<br>');
                     if(content.indexOf("本站重要通知") > 0){
                         content = content.substring(0, content.indexOf('本站重要通知'));
