@@ -41,10 +41,12 @@ const book = seq.define('books', {
     },
     close: {
         type: Sequelize.INTEGER,
+        default: 0,
         allowNull: true
     },
     views: {
         type: Sequelize.INTEGER,
+        default: 0,
         allowNull: true
     }
 }, {
