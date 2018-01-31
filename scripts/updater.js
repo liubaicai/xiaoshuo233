@@ -19,13 +19,19 @@ const start = async function () {
                 if (response && response.statusCode==200){
                     const $ = cheerio.load(escape2Html(response.body), {decodeEntities: false});
                     var title = $('meta[property="og:title"]').prop('content');
+                    if (title==null){
+                        continue;
+                    }
                     var description = $('meta[property="og:description"]').prop('content');
                     var categoryTitle = $('meta[property="og:novel:category"]').prop('content');
                     var author = $('meta[property="og:novel:author"]').prop('content');
                     var status = $('meta[property="og:novel:status"]').prop('content'); // 连载,完成
+                    if (categoryTitle==null){
+                        categoryTitle = '其他';
+                    }
                     var category = await models.category.findOne({
                         where: {
-                            title: categoryTitle
+                            title: categoryTitle,
                         }
                     });
                     if (category==null){
