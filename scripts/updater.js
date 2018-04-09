@@ -6,8 +6,16 @@ const cheerio = require('cheerio');
 const models = require('../models/models');
 const lzs = require('lz-string');
 
+
+const log4js = require('log4js');
+log4js.configure({
+    appenders: { error: { type: 'file', filename: './log/error.log' } },
+    categories: { default: { appenders: ['error'], level: 'error' } }
+});
+const logger = log4js.getLogger('error');
+
 const start = async function () {
-    for (var i = 1;i <= 50000;i++){
+    for (var i = 1;i <= 80000;i++){
         try
         {
             var book = await models.book.findById(i);
@@ -85,12 +93,16 @@ const start = async function () {
                     }
                 }else {
                     console.log(response);
+                    logger.error(uri);
+                    logger.error(response.statusCode);
                 }
             }
         }
         catch(err)
         {
             console.log(err);
+            logger.error(uri);
+            logger.error(err.message);
         }
     }
 }
