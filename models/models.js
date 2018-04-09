@@ -2,7 +2,20 @@ const Sequelize = require('sequelize');
 const Op = require('sequelize').Op
 const operatorsAliases = {}
 // const seq = new Sequelize('postgres://dbbook:123456@127.0.0.1:5432/xiaoshuo', { operatorsAliases });
-const seq = new Sequelize('sqlite://db/db.sqlite', { operatorsAliases });
+
+const log4js = require('log4js');
+log4js.configure({
+    appenders: { sql: { type: 'file', filename: './log/sql.log' } },
+    categories: { default: { appenders: ['sql'], level: 'info' } }
+});
+const logger = log4js.getLogger('sql');
+
+const seq = new Sequelize('sqlite://db/db.sqlite', {
+    operatorsAliases,
+    logging: function(sql) {
+        logger.info(sql);
+    }
+});
 
 const category = seq.define('categories', {
     id: {
@@ -72,6 +85,10 @@ const catalog = seq.define('catalogs', {
     },
     src: {
         type: Sequelize.STRING,
+        allowNull: true
+    },
+    text: {
+        type: Sequelize.TEXT,
         allowNull: true
     }
 }, {

@@ -12,67 +12,77 @@ const start = async function () {
         {
             var book = await models.book.findById(i);
             if (book==null){
+                var uri = `https://www.qu.la/book/${i}/`;
                 var response = await request({
                     method: 'GET',
-                    uri: `https://www.qu.la/book/${i}`,
+                    uri: uri,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+                    },
                     resolveWithFullResponse: true});
                 if (response && response.statusCode==200){
-                    const $ = cheerio.load(escape2Html(response.body), {decodeEntities: false});
-                    var title = $('meta[property="og:title"]').prop('content');
-                    if (title==null){
-                        continue;
-                    }
-                    var description = $('meta[property="og:description"]').prop('content');
-                    var categoryTitle = $('meta[property="og:novel:category"]').prop('content');
-                    var author = $('meta[property="og:novel:author"]').prop('content');
-                    var status = $('meta[property="og:novel:status"]').prop('content'); // 连载,完成
-                    if (categoryTitle==null){
-                        categoryTitle = '其他';
-                    }
-                    var category = await models.category.findOne({
-                        where: {
-                            title: categoryTitle,
+                    var txt = response.body;
+                    if(txt.indexOf("window.location.href=")>0){
+                        console.log(txt)
+                    }else {
+                        const $ = cheerio.load(escape2Html(txt), {decodeEntities: false});
+                        var title = $('meta[property="og:title"]').prop('content');
+                        if (title==null){
+                            continue;
                         }
-                    });
-                    if (category==null){
-                        category = await models.category.create({ title: categoryTitle})
+                        var description = $('meta[property="og:description"]').prop('content');
+                        var categoryTitle = $('meta[property="og:novel:category"]').prop('content');
+                        var author = $('meta[property="og:novel:author"]').prop('content');
+                        var status = $('meta[property="og:novel:status"]').prop('content'); // 连载,完成
+                        if (categoryTitle==null){
+                            categoryTitle = '其他';
+                        }
+                        var category = await models.category.findOne({
+                            where: {
+                                title: categoryTitle,
+                            }
+                        });
+                        if (category==null){
+                            category = await models.category.create({ title: categoryTitle})
+                        }
+                        book = await models.book.create({
+                            id: i,
+                            title: title,
+                            author: author,
+                            description: description,
+                            category_id: category.id,
+                            close: status=='完成'?1:0,
+                            views: 0,
+                        })
+
+                        // if(status=="完成"){
+                        //     var category = await models.category.findOne({
+                        //         where: {
+                        //             title: categoryTitle
+                        //         }
+                        //     });
+                        //     if (category==null){
+                        //         category = await models.category.create({ title: categoryTitle})
+                        //     }
+                        //     var alist = new Array();
+                        //     $('dl dd a').each(function(i, elem) {
+                        //         var at = $(this).text();
+                        //         var al = $(this).prop('href');
+                        //         alist.push([at,al])
+                        //     });
+                        //     var ar = await request({
+                        //         method: 'GET',
+                        //         uri: `https://www.qu.la${alist[0][1]}`,
+                        //         resolveWithFullResponse: true});
+                        //     if (ar && ar.statusCode==200){
+                        //         var a$ = cheerio.load(escape2Html(ar.body), {decodeEntities: false});
+                        //         a$('div#content script').remove();
+                        //         var content = a$('div#content').html();
+                        //         console.log(lzs.decompress(lzs.compress(content)));
+                        //     }
+                        //     return false;
+                        // }
                     }
-                    book = await models.book.create({
-                        id: i,
-                        title: title,
-                        author: author,
-                        description: description,
-                        category_id: category.id,
-                        close: status=='完成'?1:0,
-                        views: 0,
-                    })
-                    // if(status=="完成"){
-                    //     var category = await models.category.findOne({
-                    //         where: {
-                    //             title: categoryTitle
-                    //         }
-                    //     });
-                    //     if (category==null){
-                    //         category = await models.category.create({ title: categoryTitle})
-                    //     }
-                    //     var alist = new Array();
-                    //     $('dl dd a').each(function(i, elem) {
-                    //         var at = $(this).text();
-                    //         var al = $(this).prop('href');
-                    //         alist.push([at,al])
-                    //     });
-                    //     var ar = await request({
-                    //         method: 'GET',
-                    //         uri: `https://www.qu.la${alist[0][1]}`,
-                    //         resolveWithFullResponse: true});
-                    //     if (ar && ar.statusCode==200){
-                    //         var a$ = cheerio.load(escape2Html(ar.body), {decodeEntities: false});
-                    //         a$('div#content script').remove();
-                    //         var content = a$('div#content').html();
-                    //         console.log(lzs.decompress(lzs.compress(content)));
-                    //     }
-                    //     return false;
-                    // }
                 }else {
                     console.log(response);
                 }
@@ -91,7 +101,6 @@ const scheduleJob = function () {
 
     });
 }
-
 
 function escape2Html(str) {
     var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"'};
