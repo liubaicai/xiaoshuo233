@@ -10,7 +10,7 @@ router.get('/:id.html', function(req, res, next) {
             model: models.catalog,
         }],
         order: [
-            [ { model: models.catalog }, 'catalog_id' ]
+            [ { model: models.catalog }, 'id' ]
         ],
     }).then(function (book) {
         book.views = book.views+1;
@@ -25,7 +25,7 @@ router.get('/:id/:cid.html', function(req, res, next) {
     models.catalog.findOne({
         where: {
             'book_id': req.params.id,
-            'catalog_id': req.params.cid,
+            'id': req.params.cid,
         },
         include: [{
             model: models.book,
@@ -39,40 +39,46 @@ router.get('/:id/:cid.html', function(req, res, next) {
         catalog.book.save();
         var prev_catalog;
         var next_catalog;
-        var max = models.catalog.max('catalog_id',{ where: {
+        var max = models.catalog.max('id',{ where: {
                 book_id: { [models.op.eq]: catalog.book_id },
-                catalog_id: { [models.op.lt]: catalog.catalog_id }
+                id: { [models.op.lt]: catalog.id }
             }
         }).then(max => {
             prev_catalog = max;
         })
-        var min = models.catalog.min('catalog_id', { where: {
+        var min = models.catalog.min('id', { where: {
                 book_id: { [models.op.eq]: catalog.book_id },
-                catalog_id: { [models.op.gt]: catalog.catalog_id }
+                id: { [models.op.gt]: catalog.id }
             }
         }).then(min => {
             next_catalog = min;
         })
         Promise.all([max,min])
             .then(function(results){
-                request(catalog.src, function (error, response, body) {
-                    const $ = cheerio.load(escape2Html(body), {decodeEntities: false});
-                    var node = $("div#content");
-                    var content = node.html().replace(/<br>　　<br>/g, '<br>');
-                    if(content.indexOf("本站重要通知") > 0){
-                        content = content.substring(0, content.indexOf('本站重要通知'));
-                    }
-                    if(content.indexOf("请关注微信") > 0){
-                        content = content.substring(0, content.indexOf('请关注微信'));
-                    }
-
-                    res.render('detail', {
-                        catalog: catalog,
-                        content: content,
-                        prev_catalog: prev_catalog,
-                        next_catalog: next_catalog,
-                    });
+                res.render('detail', {
+                    catalog: catalog,
+                    content: catalog.text,
+                    prev_catalog: prev_catalog,
+                    next_catalog: next_catalog,
                 });
+                // request(catalog.src, function (error, response, body) {
+                //     const $ = cheerio.load(escape2Html(body), {decodeEntities: false});
+                //     var node = $("div#content");
+                //     var content = node.html().replace(/<br>　　<br>/g, '<br>');
+                //     if(content.indexOf("本站重要通知") > 0){
+                //         content = content.substring(0, content.indexOf('本站重要通知'));
+                //     }
+                //     if(content.indexOf("请关注微信") > 0){
+                //         content = content.substring(0, content.indexOf('请关注微信'));
+                //     }
+                //
+                //     res.render('detail', {
+                //         catalog: catalog,
+                //         content: content,
+                //         prev_catalog: prev_catalog,
+                //         next_catalog: next_catalog,
+                //     });
+                // });
             });
     });
 });

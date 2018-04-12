@@ -91,32 +91,32 @@
 
                         </ul>
                         <script>
-                            // $(function(){
-                            //     $.ajax({
-                            //         url:'/update.json',
-                            //         type:'GET',
-                            //         async:true,
-                            //         timeout:10000,
-                            //         dataType:'json',
-                            //         success:function(data){
-                            //             var str = "";
-                            //             data.forEach(function (book) {
-                            //                 str += '<li>' +
-                            //                     '<span class="hits">'+ book.author +'</span>' +
-                            //                     '<span class="genre">[<a target="_blank" href="/books-category.html?t='+ book.category_title +'">'+ book.category_title +'</a>]</span>' +
-                            //                     '<a href="/book/'+ book.id +'.html" target="_blank">'+ book.title +'</a>' +
-                            //                     '</li>'
-                            //             });
-                            //             $("#news_content").html(str);
-                            //         }
-                            //     })
-                            // });
+                            $(function(){
+                                $.ajax({
+                                    url:'/update.json',
+                                    type:'GET',
+                                    async:true,
+                                    timeout:10000,
+                                    dataType:'json',
+                                    success:function(data){
+                                        var str = "";
+                                        data.forEach(function (book) {
+                                            str += '<li>' +
+                                                '<span class="hits">'+ book.author +'</span>' +
+                                                '<span class="genre">[<a target="_blank" href="/books-category.html?t='+ book.category_title +'">'+ book.category_title +'</a>]</span>' +
+                                                '<a href="/book/'+ book.id +'.html" target="_blank">'+ book.title +'</a>' +
+                                                '</li>'
+                                        });
+                                        $("#news_content").html(str);
+                                    }
+                                })
+                            });
                         </script>
                     </div>
                 </div>
 
                 <% categories.forEach(function(category){ %>
-                <% if(category.books.length > 9){ %>
+                <% if(category.books.length > 0){ %>
                 <div class="index_toplist mright">
                     <div class="toptab">
                         <span><%= category.title %></span>

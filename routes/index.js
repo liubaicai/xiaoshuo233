@@ -5,53 +5,48 @@ var pinyin = require('pinyin');
 var pagination = require('pagination');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    var promises = new Array()
-    var config = {}
+router.get('/', async function(req, res, next) {
 
-    var recommend = models.book.findAll({
+    var books_recommend = await models.book.findAll({
+        where: { 'epub' : 1 },
         order: [ [ 'views', 'DESC' ] ],
         include: [models.category],
         limit: 6
-    }).then(function (books) {
-        config.books_recommend = books
     });
 
-    var hot = models.book.findAll({
+    var books_hot = await models.book.findAll({
+        where: { 'epub' : 1 },
         order: [ [ 'views', 'DESC' ] ],
         include: [models.category],
         limit: 10
-    }).then(function (books) {
-        config.books_hot = books
     });
 
-    var cates = models.category.findAll({
-        include: [{
-            model: models.book,
-            limit: 10,
-            order: [[ 'views', 'DESC' ]],
-        }],
-    }).then(function (categories) {
-        config.categories = categories
-    });
-
-    promises.push(recommend);
-    promises.push(hot);
-    promises.push(cates);
-    Promise.all(promises)
-        .then(function(results){
-            console.log(results)
-            res.render('index', {
-                pinyin: pinyin,
-                books_recommend: config.books_recommend,
-                books_hot: config.books_hot,
-                categories: config.categories,
-            });
+    var categories = new Array();
+    var cates = await models.category.findAll();
+    for (var i = 0; i < cates.length; i++){
+        var category = cates[i];
+        var books = await models.book.findAll({
+            where: { 'epub' : 1 , category_id : cates[i].dataValues.id },
+            order: [ [ 'views', 'DESC' ] ],
+            include: [models.category],
+            limit: 10
         });
+        if(books.length>0){
+            category.books = books;
+            categories.push(category);
+        }
+    }
+
+    res.render('index', {
+        pinyin: pinyin,
+        books_recommend: books_recommend,
+        books_hot: books_hot,
+        categories: categories,
+    });
 });
 
 router.get('/update.json', function (req, res) {
-    var sql = 'SELECT A.*,b.book_id,b.ID AS catalog_id,C.title AS category_title FROM books A INNER JOIN (SELECT book_id,MAX (ID) AS ID FROM catalogs GROUP BY book_id ORDER BY ID DESC LIMIT 10) b ON A.ID=b.book_id INNER JOIN categories C ON A.category_id=C.ID ORDER BY catalog_id DESC';
+    var sql = 'SELECT A.*,b.book_id,b.ID AS id,C.title AS category_title FROM books A INNER JOIN (SELECT book_id,MAX (ID) AS ID FROM catalogs GROUP BY book_id ORDER BY ID DESC LIMIT 10) b ON A.ID=b.book_id INNER JOIN categories C ON A.category_id=C.ID ORDER BY id DESC';
     models.seq.query(sql, { type: models.seq.QueryTypes.SELECT})
         .then(books => {
             res.json(books);

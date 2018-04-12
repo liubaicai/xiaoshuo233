@@ -11,6 +11,7 @@
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "^2.5.8",
+    "epub-parser": "^0.2.5",
     "express": "~4.15.5",
     "log4js": "^2.5.3",
     "lz-string": "^1.4.4",

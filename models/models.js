@@ -57,6 +57,11 @@ const book = seq.define('books', {
         default: 0,
         allowNull: true
     },
+    epub: {
+        type: Sequelize.INTEGER,
+        default: 0,
+        allowNull: true
+    },
     views: {
         type: Sequelize.INTEGER,
         default: 0,

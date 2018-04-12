@@ -60,6 +60,7 @@ const start = async function () {
                             description: description,
                             category_id: category.id,
                             close: status=='完成'?1:0,
+                            epub: 0,
                             views: 0,
                         })
 
