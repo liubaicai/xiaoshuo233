@@ -46,7 +46,7 @@ router.get('/', async function(req, res, next) {
 });
 
 router.get('/update.json', function (req, res) {
-    var sql = 'SELECT A.*,b.book_id,b.ID AS id,C.title AS category_title FROM books A INNER JOIN (SELECT book_id,MAX (ID) AS ID FROM catalogs GROUP BY book_id ORDER BY ID DESC LIMIT 10) b ON A.ID=b.book_id INNER JOIN categories C ON A.category_id=C.ID ORDER BY id DESC';
+    var sql = 'SELECT A.*,b.book_id,C.title AS category_title FROM books A INNER JOIN (SELECT book_id,MAX (ID) AS ID FROM catalogs GROUP BY book_id ORDER BY ID DESC LIMIT 10) b ON A.ID=b.book_id INNER JOIN categories C ON A.category_id=C.ID ORDER BY id DESC';
     models.seq.query(sql, { type: models.seq.QueryTypes.SELECT})
         .then(books => {
             res.json(books);
@@ -60,6 +60,7 @@ router.get('/books-all.html', function(req, res, next) {
         page = 1
     }
     models.book.findAndCountAll({
+        where: { 'epub' : 1 },
         order: [ [ 'views', 'DESC' ] ],
         limit: pagesize,
         offset: (page - 1) * pagesize
@@ -115,7 +116,7 @@ router.get('/books-category.html', function(req, res, next) {
     }
     models.category.findOne({where: {'title': t}}).then(function (category) {
         models.book.findAndCountAll({
-            where: { 'category_id': category.id },
+            where: { 'epub' : 1, 'category_id': category.id },
             order: [ [ 'views', 'DESC' ] ],
             limit: pagesize,
             offset: (page - 1) * pagesize
@@ -165,6 +166,7 @@ router.get('/search.html', function(req, res, next) {
     if (key){
         models.book.findAndCountAll({
             where: {
+                'epub' : 1,
                 title: {
                     [models.op.like]: "%"+key+"%"
                 }

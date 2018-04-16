@@ -89,7 +89,7 @@ epubParser.open(process.argv.splice(2)[0], async function (err, epubData) {
 
 function getArrayContent(strArray){
     try {
-        return strArray[0].text[0].trim();
+        return strArray[0].text[0].trim().replace("《","").replace("》","");
     } catch (error) {
         return '';
     }

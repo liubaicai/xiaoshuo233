@@ -1,4 +1,5 @@
 
 
 var updater = require('./scripts/updater');
-updater.start();
+//updater.startList();
+updater.startContent();
