@@ -3,12 +3,7 @@ const Op = require('sequelize').Op
 const operatorsAliases = {}
 // const seq = new Sequelize('postgres://dbbook:123456@127.0.0.1:5432/xiaoshuo', { operatorsAliases });
 
-const log4js = require('log4js');
-log4js.configure({
-    appenders: { sql: { type: 'file', filename: './log/sql.log' } },
-    categories: { default: { appenders: ['sql'], level: 'info' } }
-});
-const logger = log4js.getLogger('sql');
+const logger = require('../modules/logger')('sql');
 
 const seq = new Sequelize('sqlite://db/db.sqlite', {
     operatorsAliases,
@@ -105,9 +100,9 @@ book.hasMany(catalog, {foreignKey: 'book_id'});
 catalog.belongsTo(book, {foreignKey: 'book_id'});
 book.belongsTo(category, {foreignKey: 'category_id'});
 
-category.sync();
-book.sync();
-catalog.sync();
+// category.sync();
+// book.sync();
+// catalog.sync();
 
 module.exports = {};
 module.exports.category = category

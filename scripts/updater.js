@@ -2,7 +2,7 @@
 const schedule = require('node-schedule');
 
 const request = require('request-promise');
-var retryRequest = require('../modules/request-promise-retry');
+const retryRequest = require('../modules/request-promise-retry');
 const cheerio = require('cheerio');
 const models = require('../models/models');
 const lzs = require('lz-string');
@@ -16,13 +16,14 @@ const startList = async function () {
             var book = await models.book.findById(i);
             if (book==null){
                 var uri = `https://www.qu.la/book/${i}/`;
-                var response = await request({
+                var response = await retryRequest({
                     method: 'GET',
                     uri: uri,
                     headers: {
                         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
                     },
                     timeout: 120000,
+                    retry : 10,
                     resolveWithFullResponse: true});
                 if (response && response.statusCode==200){
                     var txt = response.body;
@@ -82,13 +83,14 @@ const startContent = async function () {
         if (book!=null){
             logger.info(`${book.title}`)
             var uri = `https://m.qu.la/booklist/${book.id}.html`;
-            var response = await request({
+            var response = await retryRequest({
                 method: 'GET',
                 uri: uri,
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
                 },
                 timeout: 300000,
+                retry : 10,
                 resolveWithFullResponse: true});
             if (response && response.statusCode==200){
                 var txt = response.body;
@@ -143,8 +145,6 @@ const startContent = async function () {
                     await models.catalog.bulkCreate(catalogsArray);
                     book.epub = 1;
                     await book.save();
-
-                    return false;
                 }
             }else {
                 logger.error(uri);

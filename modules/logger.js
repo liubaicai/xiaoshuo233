@@ -14,6 +14,9 @@ const logger = scope => {
             new (Winston.transports.File)({
                 handleExceptions: true,
                 humanReadableUnhandledException: true,
+                timestamp: true,
+                colorize: true,
+                prettyPrint: true,
                 filename: `./log/${scope}.log`,
                 level: 'error',
             })
