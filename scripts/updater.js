@@ -76,7 +76,16 @@ const startList = async function () {
 }
 
 const startContent = async function () {
-    var books = await models.book.findAll();
+    var books = await models.book.findAll({
+        where: {
+            'epub':{
+                [models.op.or]: [
+                    {[models.op.is]: null},
+                    {[models.op.not]: 1},
+                ]
+            }
+        }
+    });
     var len = books.length;
     for(var i=0;i<len;i++){
         var book = books[i];
