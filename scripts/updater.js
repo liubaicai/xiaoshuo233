@@ -2,17 +2,12 @@
 const schedule = require('node-schedule');
 
 const request = require('request-promise');
+var retryRequest = require('../modules/request-promise-retry');
 const cheerio = require('cheerio');
 const models = require('../models/models');
 const lzs = require('lz-string');
 
-
-const log4js = require('log4js');
-log4js.configure({
-    appenders: { error: { type: 'file', filename: './log/error.log' } },
-    categories: { default: { appenders: ['error'], level: 'error' } }
-});
-const logger = log4js.getLogger('error');
+const logger = require('../modules/logger')('updater');
 
 const startList = async function () {
     for (var i = 1;i <= 80000;i++){
@@ -32,7 +27,7 @@ const startList = async function () {
                 if (response && response.statusCode==200){
                     var txt = response.body;
                     if(txt.indexOf("window.location.href=")>0){
-                        console.log(txt)
+                        logger.info(txt)
                     }else {
                         const $ = cheerio.load(escape2Html(txt), {decodeEntities: false});
                         var title = $('meta[property="og:title"]').prop('content');
@@ -66,7 +61,6 @@ const startList = async function () {
                         })
                     }
                 }else {
-                    console.log(response);
                     logger.error(uri);
                     logger.error(response.statusCode);
                 }
@@ -74,9 +68,8 @@ const startList = async function () {
         }
         catch(err)
         {
-            console.log(err);
             logger.error(uri);
-            logger.error(err.message);
+            logger.error(err);
         }
     }
 }
@@ -87,7 +80,7 @@ const startContent = async function () {
     for(var i=0;i<len;i++){
         var book = books[i];
         if (book!=null){
-            console.log(`${new Date().toLocaleString()}===>>${book.title}`)
+            logger.info(`${book.title}`)
             var uri = `https://m.qu.la/booklist/${book.id}.html`;
             var response = await request({
                 method: 'GET',
@@ -100,7 +93,7 @@ const startContent = async function () {
             if (response && response.statusCode==200){
                 var txt = response.body;
                 if(txt.indexOf("window.location.href=")>0){
-                    console.log(txt)
+                    logger.info(txt)
                 }else {
                     const $ = cheerio.load(escape2Html(txt), {decodeEntities: false});
 
@@ -116,14 +109,15 @@ const startContent = async function () {
                     var catalogsArray = new Array();
                     for(var j=0;j<hrefArray.length;j++){
                         try{
-                            console.log(`${new Date().toLocaleString()}===>>${hrefArray[j][0]}`)
-                            var ar = await request({
+                            logger.info(`${hrefArray[j][0]}`)
+                            var ar = await retryRequest({
                                 method: 'GET',
                                 uri: `https://www.qu.la${hrefArray[j][1]}`,
                                 headers: {
                                     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
                                 },
                                 timeout: 600000,
+                                retry : 10,
                                 resolveWithFullResponse: true});
                             if (ar && ar.statusCode==200){
                                 var a$ = cheerio.load(escape2Html(ar.body), {decodeEntities: false});
@@ -138,7 +132,7 @@ const startContent = async function () {
                                 });
                             }
                         }catch (err){
-                            console.log(`${new Date().toLocaleString()}===>>${err.message}`)
+                            logger.error(err)
                         }
                     }
                     await models.catalog.destroy({
@@ -153,7 +147,6 @@ const startContent = async function () {
                     return false;
                 }
             }else {
-                console.log(response);
                 logger.error(uri);
                 logger.error(response.statusCode);
             }
