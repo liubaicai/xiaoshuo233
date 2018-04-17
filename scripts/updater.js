@@ -22,7 +22,7 @@ const startList = async function () {
                     headers: {
                         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
                     },
-                    timeout: 120000,
+                    timeout: 30000,
                     retry : 10,
                     resolveWithFullResponse: true});
                 if (response && response.statusCode==200){
@@ -98,7 +98,7 @@ const startContent = async function () {
                 headers: {
                     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
                 },
-                timeout: 300000,
+                timeout: 30000,
                 retry : 10,
                 resolveWithFullResponse: true});
             if (response && response.statusCode==200){
@@ -117,34 +117,59 @@ const startContent = async function () {
                         }
                     });
 
-                    var catalogsArray = new Array();
+                    var hrefArrays = new Array();
+                    var hrefArraysTemp = new Array();
                     for(var j=0;j<hrefArray.length;j++){
-                        try{
-                            logger.info(`${hrefArray[j][0]}`)
-                            var ar = await retryRequest({
-                                method: 'GET',
-                                uri: `https://www.qu.la${hrefArray[j][1]}`,
-                                headers: {
-                                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
-                                },
-                                timeout: 600000,
-                                retry : 10,
-                                resolveWithFullResponse: true});
-                            if (ar && ar.statusCode==200){
-                                var a$ = cheerio.load(escape2Html(ar.body), {decodeEntities: false});
-                                a$('div#content script').remove();
-                                var content = a$('div#content').html();
-                                catalogsArray.push({
-                                    book_id: book.id,
-                                    catalog_id: null,
-                                    title: hrefArray[j][0],
-                                    src: null,
-                                    text: content
-                                });
-                            }
-                        }catch (err){
-                            logger.error(err)
+                        hrefArraysTemp.push(hrefArray[j])
+                        if(hrefArraysTemp.length>=10){
+                            hrefArrays.push(hrefArraysTemp)
+                            hrefArraysTemp = new Array();
                         }
+                    }
+
+                    var catalogsArray = new Array();
+                    for(var j=0;j<hrefArrays.length;j++){
+
+                        var promises = new Array();
+
+                        for(var k=0;k<hrefArrays[j].length;k++){
+
+                            try{
+                                logger.info(`${hrefArrays[j][k][0]}`)
+                                var promise = retryRequest({
+                                    method: 'GET',
+                                    uri: `https://www.qu.la${hrefArrays[j][k][1]}`,
+                                    headers: {
+                                        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+                                    },
+                                    querystring:hrefArrays[j][k][0],
+                                    timeout: 30000,
+                                    retry : 10,
+                                    resolveWithFullResponse: true
+                                }).then(function (ar) {
+                                    if (ar && ar.statusCode==200){
+                                        var a$ = cheerio.load(escape2Html(ar.body), {decodeEntities: false});
+                                        a$('div#content script').remove();
+                                        var content = a$('div#content').html();
+                                        var ccid = ar.request.uri.path.split('/')[3].split('.')[0]
+                                        catalogsArray.push({
+                                            book_id: book.id,
+                                            catalog_id: ccid,
+                                            title: ar.request.querystring,
+                                            src: null,
+                                            text: content
+                                        });
+                                    }
+                                });
+                                promises.push(promise)
+                            }catch (err){
+                                logger.error(err)
+                            }
+                        }
+
+                        await Promise.all(promises);
+
+                        break
                     }
                     await models.catalog.destroy({
                         where: {

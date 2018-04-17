@@ -10,7 +10,12 @@ router.get('/:id.html', function(req, res, next) {
             model: models.catalog,
         }],
         order: [
-            [ { model: models.catalog }, 'id' ]
+            [
+                { model: models.catalog }, 'catalog_id'
+            ],
+            [
+                { model: models.catalog }, 'id'
+            ]
         ],
     }).then(function (book) {
         book.views = book.views+1;
