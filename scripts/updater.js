@@ -168,8 +168,6 @@ const startContent = async function () {
                         }
 
                         await Promise.all(promises);
-
-                        break
                     }
                     await models.catalog.destroy({
                         where: {
