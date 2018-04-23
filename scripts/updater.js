@@ -10,7 +10,7 @@ const lzs = require('lz-string');
 const logger = require('../modules/logger')('updater');
 
 const startList = async function () {
-    for (var i = 1;i <= 80000;i++){
+    for (var i = 1;i <= 100000;i++){
         try
         {
             var book = await models.book.findById(i);
